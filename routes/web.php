@@ -23,3 +23,7 @@ Route::get('/register', function () {
 });
 
 Route::post('/store', [LoginRegisterController::class,'store']);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

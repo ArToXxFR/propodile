@@ -27,7 +27,9 @@ class LoginRegisterController extends Controller
 
         User::create([
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
         ]);
 
         $credentials = $request->only('email','password');
