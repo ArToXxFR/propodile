@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginRegisterController;
+use App\Http\Controllers\Project\CreateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,4 +27,11 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::get('/project/create', function() {
+        return view('project.new_project');
+    })->name('project.create.get');
+    
+    Route::post('/project/create', [CreateController::class, 'createProject'])
+    ->name('project.create.post');
 });
+
