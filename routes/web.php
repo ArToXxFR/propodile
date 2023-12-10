@@ -16,9 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ShowController::class, 'showAll']);
 
 Route::middleware([
     'auth:sanctum',
@@ -36,5 +34,6 @@ Route::middleware([
     ->name('project.create.post');
 });
 
-Route::get('/project/show/{id}', [ShowController::class, 'showProject']);
+Route::get('/project/show/{id}', [ShowController::class, 'showProject'])
+->name('project.show');
 

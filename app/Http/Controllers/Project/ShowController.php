@@ -15,4 +15,12 @@ class ShowController extends Controller
             'project' => $project
         ]);
     }
+
+    public function showAll() {
+        $projects = Project::all();
+
+        return view('welcome', [
+            'projects' => $projects
+        ]);
+    }
 }
