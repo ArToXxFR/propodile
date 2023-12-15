@@ -34,6 +34,8 @@ Route::middleware([
     ->name('project.create.post');
 });
 
+Route::get('/project/show', [ShowController::class, 'showAll'])
+->name('project.show');
 Route::get('/project/show/{id}', [ShowController::class, 'showProject'])
 ->name('project.show');
 
