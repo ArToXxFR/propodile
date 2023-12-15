@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title', 100);
             $table->string('description', 1080);  
+            $table->string('image')->default("public/projects/images/default_logo.png");
             $table->unsignedBigInteger('id_owner');
             $table->foreign('id_owner')->on('users')->references('id');          
             $table->timestamps();

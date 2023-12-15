@@ -37,6 +37,7 @@
                                 <p class="text-gray-700 flex-grow">
                                     {{ $project->description }}
                                 </p>
+                                <img src="{{ asset("storage/projects/images/" . basename($project->image)) }}" alt="">
                             </div>
                         </a>
                     </div>
