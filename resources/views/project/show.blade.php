@@ -35,4 +35,16 @@
                 {{ $project->description }}
                 {{ $project->id_owner }}
             </div>
+            <div>
+                @if ($project->id_owner == $user_id)
+                    <form action="{{ route("project.delete") }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer ce projet?')">
+                        @csrf
+                        <input type="hidden" value="{{ $project->id }}" name="id">
+                        <input type="hidden" value="{{ $project->id_owner }}" name="id_owner">
+                        <button type="submit" class="text-indigo-600">Supprimer le projet</button>
+                    </form>
+
+                @endif
+            </div>
+
         </div>
