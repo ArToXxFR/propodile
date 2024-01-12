@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginRegisterController;
 use App\Http\Controllers\Project\CreateController;
 use App\Http\Controllers\Project\ShowController;
+use App\Http\Controllers\Project\DeleteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ShowController::class, 'showAll']);
+Route::get('/', [ShowController::class, 'showAll'])->name('home');
 
 Route::middleware([
     'auth:sanctum',
@@ -29,9 +30,12 @@ Route::middleware([
     Route::get('/project/create', function() {
         return view('project.create');
     })->name('project.create.get');
-    
+
     Route::post('/project/create', [CreateController::class, 'createProject'])
     ->name('project.create.post');
+
+    Route::post('/project/delete', [DeleteController::class, 'deleteProject'])
+    ->name('project.delete');
 });
 
 Route::get('/project/show', [ShowController::class, 'showAll'])

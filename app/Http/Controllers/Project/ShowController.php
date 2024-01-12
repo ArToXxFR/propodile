@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Project;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class ShowController extends Controller
 {
@@ -12,7 +14,8 @@ class ShowController extends Controller
         $project = Project::find($id);
 
         return view('project.show',[
-            'project' => $project
+            'project' => $project,
+            'user_id' => Auth::id(),
         ]);
     }
 
@@ -20,7 +23,7 @@ class ShowController extends Controller
         $projects = Project::all();
 
         return view('welcome', [
-            'projects' => $projects
+            'projects' => $projects,
         ]);
     }
 }

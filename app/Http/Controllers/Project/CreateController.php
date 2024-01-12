@@ -15,13 +15,27 @@ class CreateController extends Controller
      * Create a new project
      */
     public function createProject(Request $request) {
-        $path = $request->file('image')->store('public/projects/images');  
-        Project::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'image' => $path,
-            'id_owner' => Auth::id(),
-        ]);
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            // Path to store the file
+            $path = $request->file('image')->store('public/projects/images');
+
+            // Store project in database
+            Project::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => $path,
+                'id_owner' => Auth::id(),
+            ]);
+
+        } else {
+            // Store project with default image
+            Project::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => "public/projects/images/default.jpg",
+                'id_owner' => Auth::id(),
+            ]);
+        }
         return to_route('project.create.post');
     }
 }
