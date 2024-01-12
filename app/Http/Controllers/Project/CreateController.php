@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Team;
 use Illuminate\Support\Facades\Auth;
 
 class CreateController extends Controller
@@ -34,6 +35,12 @@ class CreateController extends Controller
                 'description' => $request->description,
                 'image' => "public/projects/images/default.jpg",
                 'id_owner' => Auth::id(),
+            ]);
+
+            Team::create([
+                'name' => $request->title,
+                'personal_team' => Auth::id(),
+                'user_id' => Auth::id()
             ]);
         }
         return to_route('project.create.post');
