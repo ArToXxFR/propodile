@@ -31,6 +31,7 @@ class Team extends JetstreamTeam
         'personal_team',
         'user_id',
         'project_id',
+
     ];
 
     /**

@@ -15,11 +15,11 @@
     </head>
     <body>
         <div class="flex flex-wrap justify-center w-screen">
-            <form action="{{ route('project.create.post')}}" method="POST">
+            <form action="{{ route('project.create.post')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input class="text-xl font-semibold" name="title" placeholder="Nom du projet..." type="text">
                 <input class="text-xl font-semibold" name="description" type="text">
-                <input type="file" name="image">
+                <input type="file" name="image" accept="image/*">
                 <button>Envoyer</button>
             </form>
         </div>

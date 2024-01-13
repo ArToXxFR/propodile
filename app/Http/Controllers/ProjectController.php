@@ -17,32 +17,29 @@ class ProjectController extends Controller
      */
     public function create(Request $request) {
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            // Path to store the file
-            $path = $request->file('image')->store('public/projects/images');
+            $image = $request->file('image');
 
-            // Store project in database
-            Project::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'image' => $path,
-                'id_owner' => Auth::id(),
-            ]);
+            // Générer un nom unique pour le fichier image
+            $imageName = uniqid('image_') . '.' . $image->getClientOriginalExtension();
 
-        } else {
-            // Store project with default image
-            $project = Project::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'image' => "public/projects/images/default.jpg",
-                'id_owner' => Auth::id(),
-            ]);
-            Team::create([
-                'name' => $request->title,
-                'personal_team' => 1,
-                'user_id' => Auth::id(),
-                'project_id' => $project->id
-            ]);
+            // Stocker le fichier image dans le répertoire "public/images"
+            $image->storeAs('projects/images', $imageName, 'public');
         }
+        // Store project in database
+        $project = Project::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => (isset($image)) ? 'storage/projects/images/' . $imageName : "storage/projects/images/default.jpg",
+            'id_owner' => Auth::id(),
+        ]);
+
+        Team::create([
+            'name' => $request->title,
+            'personal_team' => 1,
+            'user_id' => Auth::id(),
+            'project_id' => $project->id
+        ]);
+
         return to_route('project.create.post');
     }
 
