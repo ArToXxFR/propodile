@@ -32,9 +32,26 @@
                 {{ $project->title }}
             </div>
             <div class='text-gray-400'>
-                {{ $project->description }}
-                {{ $project->id_owner }}
+                Description : {{ $project->description }}
             </div>
+            <!-- List of members -->
+            <span class="text-indigo-600">Owner : {{ $owner->name }}</span>
+            <div>
+                <span class="text-indigo-600">Liste des membres :</span>
+                <ul>
+                    @if (!$users->isEmpty())
+                        @foreach ($users as $user)
+                            <li class="text-indigo-600">
+                                - {{ $user->name }}
+                            </li>
+                        @endforeach
+                    @else
+                        <li class="text-indigo-400"> Aucun membres pour le moment</li>
+                    @endif
+                </ul>
+            </div>
+
+            <!-- Button to delete the project -->
             <div>
                 @if ($project->id_owner == $user_id)
                     <form action="{{ route("project.delete") }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer ce projet?')">

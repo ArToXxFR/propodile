@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TeamUser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
@@ -54,12 +56,16 @@ class ProjectController extends Controller
 
     public function show(int $id) {
         $project = Project::find($id);
-        // $team = Team::where('project_id', $id)->get();
-        // dd($team->allUsers());
+        $team = Team::where('project_id', $id)->first();
+        $owner = User::where('id', $team->user_id)->first();
+        $users_id = TeamUser::where('team_id', $team->id)->pluck('user_id')->toArray();
+        $users = User::whereIn('id', $users_id)->get();
         
         return view('project.show',[
             'project' => $project,
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
+            'users' => $users,
+            'owner' => $owner
         ]);
     }
 
