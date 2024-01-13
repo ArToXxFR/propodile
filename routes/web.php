@@ -34,6 +34,13 @@ Route::middleware([
 
     Route::post('/project/delete', [ProjectController::class, 'delete'])
     ->name('project.delete');
+
+    Route::post('/project/update', [ProjectController::class, 'update'])
+    ->name('project.update');
+
+    Route::get('/project/update/{id}', function() {
+        return view('project.update');
+    })->name('project.update.form');
 });
 
 Route::get('/project/show', [ProjectController::class, 'showAll'])
