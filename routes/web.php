@@ -1,9 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginRegisterController;
-use App\Http\Controllers\Project\CreateController;
-use App\Http\Controllers\Project\ShowController;
-use App\Http\Controllers\Project\DeleteController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ShowController::class, 'showAll'])->name('home');
+Route::get('/', [ProjectController::class, 'showAll'])->name('home');
 
 Route::middleware([
     'auth:sanctum',
@@ -31,15 +29,15 @@ Route::middleware([
         return view('project.create');
     })->name('project.create.get');
 
-    Route::post('/project/create', [CreateController::class, 'createProject'])
+    Route::post('/project/create', [ProjectController::class, 'create'])
     ->name('project.create.post');
 
-    Route::post('/project/delete', [DeleteController::class, 'deleteProject'])
+    Route::post('/project/delete', [ProjectController::class, 'delete'])
     ->name('project.delete');
 });
 
-Route::get('/project/show', [ShowController::class, 'showAll'])
+Route::get('/project/show', [ProjectController::class, 'showAll'])
 ->name('project.show');
-Route::get('/project/show/{id}', [ShowController::class, 'showProject'])
+Route::get('/project/show/{id}', [ProjectController::class, 'show'])
 ->name('project.show');
 
