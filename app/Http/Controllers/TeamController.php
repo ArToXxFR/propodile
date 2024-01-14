@@ -30,9 +30,9 @@ class TeamController extends Controller
         return to_route('home')->with('status', 'La demande a bien été envoyée.');
     }
 
-    public function acceptRequest(int $id) {
+    public function acceptRequest(int $team_id) {
         
-        $request = TeamJoinRequest::find($id);
+        $request = TeamJoinRequest::where('team_id', $team_id)->firstOrFail();
 
         TeamUser::create([
             'user_id' => $request->user_id,

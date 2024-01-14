@@ -14,6 +14,7 @@ class TeamUser extends Model
     protected $fillable = [
         'user_id',
         'team_id',
+        'role',
     ];
 
     public function users() {
