@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginRegisterController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +40,9 @@ Route::middleware([
     ->name('project.update');
 
     Route::get('/project/update/{id}', [ProjectController::class, 'updateForm'])->name('project.update.form');
+
+    Route::post('/team/join', [TeamController::class, 'joinRequest'])
+    ->name('team.join');
 });
 
 Route::get('/project/show', [ProjectController::class, 'showAll'])

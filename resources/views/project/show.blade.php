@@ -68,5 +68,12 @@
                     <a href="{{ route("project.update.form", ['id' => $project->id]) }}" class="text-indigo-600">Modifier le projet</a>
                 @endif
             </div>
+            <div>
+                <form action="{{ route("team.join") }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment demander à rejoindre le projet ?')">
+                    @csrf
+                    <input type="hidden" value="{{ $project->id }}" name="id">
+                    <button type="submit" class="text-indigo-600">Demander à rejoindre le projet</button>
+                </form>
+            </div>
 
         </div>
