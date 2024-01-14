@@ -63,5 +63,10 @@
 
                 @endif
             </div>
+            <div>
+                @if ($project->id_owner == $user_id)
+                    <a href="{{ route("project.update.form", ['id' => $project->id]) }}" class="text-indigo-600">Modifier le projet</a>
+                @endif
+            </div>
 
         </div>

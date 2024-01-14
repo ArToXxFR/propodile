@@ -12,10 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
-    /**
-     * Create a new project
-     */
-    public function create(Request $request) {
+
+    private function isImage(Request $request) {
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $image = $request->file('image');
 
@@ -24,12 +22,22 @@ class ProjectController extends Controller
 
             // Stocker le fichier image dans le répertoire "public/images"
             $image->storeAs('projects/images', $imageName, 'public');
+
+            return $imageName;
         }
+    }
+    /**
+     * Create a new project
+     */
+    public function create(Request $request) {
+        
+        $image = $this->isImage($request);
+
         // Store project in database
         $project = Project::create([
             'title' => $request->title,
             'description' => $request->description,
-            'image' => (isset($image)) ? 'storage/projects/images/' . $imageName : "storage/projects/images/default.jpg",
+            'image' => (isset($image)) ? 'storage/projects/images/' . $image : "storage/projects/images/default.jpg",
             'id_owner' => Auth::id(),
         ]);
 
@@ -71,6 +79,28 @@ class ProjectController extends Controller
 
         return view('welcome', [
             'projects' => $projects
+        ]);
+    }
+
+    public function update(Request $request) {
+        $project = Project::find($request->id);
+
+        $image = $this->isImage($request);
+
+        $project->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => (isset($image)) ? 'storage/projects/images/' . $image : $project->image
+        ]);
+
+        return to_route('home');
+    }
+
+    public function updateForm(int $id) {
+        $project = Project::find($id);
+
+        return view('project.update', [
+            'project' => $project
         ]);
     }
 }
