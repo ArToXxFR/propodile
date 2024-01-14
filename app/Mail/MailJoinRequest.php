@@ -8,18 +8,23 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\URL;
 
 class MailJoinRequest extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $user;
+
+    public $team_id;
+
     /**
      * Create a new message instance.
      */
-    public function __construct($user)
+    public function __construct($user, $team_id)
     {
         $this->user = $user;
+        $this->team_id = $team_id;
     }
 
     /**
@@ -41,6 +46,7 @@ class MailJoinRequest extends Mailable
             markdown: 'emails.team-join-request',
             with: [
                 'user' => $this->user,
+                'acceptUrl' => URL::signedRoute('team.accept', ['id' => $this->team_id])
             ]
         );
     }

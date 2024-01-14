@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('team_join_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('team_id')->constrained()->cascadeOnDelete();
-            $table->string('email');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

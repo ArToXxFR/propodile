@@ -11,6 +11,11 @@ class TeamUser extends Model
 
     protected $table = 'team_user';
 
+    protected $fillable = [
+        'user_id',
+        'team_id',
+    ];
+
     public function users() {
         $this->belongsToMany(User::class);
     }

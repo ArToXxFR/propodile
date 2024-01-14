@@ -69,9 +69,10 @@
                 @endif
             </div>
             <div>
-                <form action="{{ route("team.join") }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment demander à rejoindre le projet ?')">
+                <form action="{{ route("team.join") }}" method="GET" onsubmit="return confirm('Voulez-vous vraiment demander à rejoindre le projet ?')">
                     @csrf
                     <input type="hidden" value="{{ $project->id }}" name="id">
+                    <input type="hidden" value="{{ $project->team_id }}" name="team_id">
                     <button type="submit" class="text-indigo-600">Demander à rejoindre le projet</button>
                 </form>
             </div>

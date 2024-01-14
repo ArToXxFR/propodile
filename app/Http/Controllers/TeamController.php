@@ -6,6 +6,7 @@ use App\Actions\Jetstream\AddTeamMember;
 use App\Models\Team;
 use App\Models\TeamJoinRequest;
 use App\Mail\MailJoinRequest;
+use App\Models\TeamUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,18 +21,28 @@ class TeamController extends Controller
         $owner = User::where('id', $team->user_id)->first();
 
         TeamJoinRequest::create([
-            'email' => Auth::user()->email,
+            'user_id' => $user->id,
             'team_id' => $team->id,
         ]);
 
-        Mail::to($owner->email)->send(new MailJoinRequest($user->name));
+        Mail::to($owner->email)->send(new MailJoinRequest($user->name, $team->id));
 
         return to_route('home')->with('status', 'La demande a bien été envoyée.');
     }
 
-    public function acceptRequest(AddTeamMember $addTeamMember) {
+    public function acceptRequest(int $id) {
+        
         $request = TeamJoinRequest::find($id);
 
-        $addTeamMember->($request->team_id, $request->email)
+        TeamUser::create([
+            'user_id' => $request->user_id,
+            'team_id' => $request->team_id,
+        ]);
+
+        $request->delete();
+
+        return redirect(config('fortify.home'))->banner(
+            __('Great! You have accepted the request !'),
+        );
     }
 }

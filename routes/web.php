@@ -41,8 +41,11 @@ Route::middleware([
 
     Route::get('/project/update/{id}', [ProjectController::class, 'updateForm'])->name('project.update.form');
 
-    Route::post('/team/join', [TeamController::class, 'joinRequest'])
+    Route::get('/team/join', [TeamController::class, 'joinRequest'])
     ->name('team.join');
+
+    Route::get('/team/accept/{id}', [TeamController::class, 'acceptRequest'])
+    ->name('team.accept');
 });
 
 Route::get('/project/show', [ProjectController::class, 'showAll'])
