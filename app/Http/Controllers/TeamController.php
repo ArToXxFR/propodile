@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Gate;
 
 class TeamController extends Controller
 {
@@ -32,7 +33,13 @@ class TeamController extends Controller
 
     public function acceptRequest(int $team_id) {
         
+        
         $request = TeamJoinRequest::where('team_id', $team_id)->firstOrFail();
+
+        $user = User::find(Auth::id());
+        $team = Team::find($team_id);
+
+        Gate::forUser($user)->authorize('addTeamMember', $team);
 
         TeamUser::create([
             'user_id' => $request->user_id,
