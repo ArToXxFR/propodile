@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TeamJoinRequest;
 use App\Models\TeamUser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -26,6 +27,7 @@ class ProjectController extends Controller
             return $imageName;
         }
     }
+
     /**
      * Create a new project
      */
@@ -62,15 +64,18 @@ class ProjectController extends Controller
     public function show(int $id) {
         $project = Project::find($id);
         $team = Team::where('project_id', $id)->first();
-        $owner = User::where('id', $team->user_id)->first();
+        $owner_project = User::where('id', $team->user_id)->first();
         $users_id = TeamUser::where('team_id', $team->id)->pluck('user_id')->toArray();
-        $users = User::whereIn('id', $users_id)->get();
+        $users_belongs_project = User::whereIn('id', $users_id)->get();
+        
+        $isAlreadyJoinRequest = TeamJoinRequest::where('user_id', Auth::id())->where('team_id', $team->id)->first();
         
         return view('project.show',[
             'project' => $project,
-            'user_id' => Auth::id(),
-            'users' => $users,
-            'owner' => $owner
+            'users' => $users_belongs_project,
+            'owner' => $owner_project,
+            'team' => $team,
+            'isAlreadyJoinRequest' => $isAlreadyJoinRequest
         ]);
     }
 
