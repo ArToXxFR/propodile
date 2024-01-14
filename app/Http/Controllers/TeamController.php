@@ -44,6 +44,7 @@ class TeamController extends Controller
         TeamUser::create([
             'user_id' => $request->user_id,
             'team_id' => $request->team_id,
+            'role' => 'editor'
         ]);
 
         $request->delete();
