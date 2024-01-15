@@ -70,24 +70,31 @@
             </div>
             <!-- Ask to join project / Invite members -->
             <div>
-                @if ($project->id_owner != Auth::id())
-                    @if (!Auth::user()->belongstoTeam($team))
-                        @if (isset($isAlreadyJoinRequest))
-                            <div class="text-red-600">
-                                Demande en attente
-                            </div>
-                        @else
-                            <form action="{{ route("team.join") }}" method="GET" onsubmit="return confirm('Voulez-vous vraiment demander à rejoindre le projet ?')">
-                                @csrf
-                                <input type="hidden" value="{{ $project->id }}" name="id">
-                                <input type="hidden" value="{{ $project->team_id }}" name="team_id">
-                                <button type="submit" class="text-indigo-600">Demander à rejoindre le projet</button>
-                            </form>
+                @if (Auth::check())
+                    @if ($project->id_owner != Auth::id())
+                        @if (!Auth::user()->belongstoTeam($team))
+                            @if (isset($isAlreadyJoinRequest))
+                                <div class="text-red-600">
+                                    Demande en attente
+                                </div>
+                            @else
+                                <form action="{{ route("team.join") }}" method="GET" onsubmit="return confirm('Voulez-vous vraiment demander à rejoindre le projet ?')">
+                                    @csrf
+                                    <input type="hidden" value="{{ $project->id }}" name="id">
+                                    <input type="hidden" value="{{ $project->team_id }}" name="team_id">
+                                    <button type="submit" class="text-indigo-600">Demander à rejoindre le projet</button>
+                                </form>
+                            @endif
                         @endif
+                    @else
+                        <a href="{{ route('teams.show', $project->id) }}" :active="request()->routeIs('teams.show')" class="text-indigo-800">Inviter des membres</a>
                     @endif
                 @else
-                    <a href="{{ route('teams.show', $project->id) }}" :active="request()->routeIs('teams.show')" class="text-indigo-800">Inviter des membres</a>
+                    <div class="text-red-600">
+                        Vous devez être connecté pour interagir avec le projet.
+                    </div>
                 @endif
+
             </div>
 
         </div>
