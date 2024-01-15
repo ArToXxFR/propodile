@@ -20,6 +20,23 @@
             </div>
 
             <div class="mt-4">
+                <x-label for="grade" value="{{ __('Quel année êtes-vous ?') }}" />
+                <select name="grade" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">
+                    @foreach(\App\Models\Grade::all() as $grade)
+                        <option value="{{ $grade->id }}">
+                            {{ $grade->name  }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mt-4">
+                <x-label for="email" value="{{ __('Description') }}" />
+                <textarea name="description" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm resize-vertical block mt-1 w-full"></textarea>
+            </div>
+
+
+            <div class="mt-4">
                 <x-label for="password" value="{{ __('Password') }}" />
                 <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
             </div>

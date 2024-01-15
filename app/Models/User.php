@@ -26,7 +26,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'grade', 'description'
     ];
 
     /**
@@ -61,5 +61,9 @@ class User extends Authenticatable
 
     public function teams_users() {
         return $this->belongsToMany(TeamUser::class);
+    }
+
+    public function grade() {
+        return $this->hasOne(Grade::class);
     }
 }
