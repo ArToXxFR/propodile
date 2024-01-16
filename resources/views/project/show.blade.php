@@ -53,25 +53,25 @@
 
             <!-- Button to delete the project -->
             <div>
-                @if ($project->id_owner == Auth::id())
+                @if ($project->owner_id == Auth::id())
                     <form action="{{ route("project.delete") }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer ce projet?')">
                         @csrf
                         <input type="hidden" value="{{ $project->id }}" name="id">
-                        <input type="hidden" value="{{ $project->id_owner }}" name="id_owner">
+                        <input type="hidden" value="{{ $project->owner_id }}" name="owner_id">
                         <button type="submit" class="text-indigo-600">Supprimer le projet</button>
                     </form>
 
                 @endif
             </div>
             <div>
-                @if ($project->id_owner == Auth::id())
+                @if ($project->owner_id == Auth::id())
                     <a href="{{ route("project.update.form", ['id' => $project->id]) }}" class="text-indigo-600">Modifier le projet</a>
                 @endif
             </div>
             <!-- Ask to join project / Invite members -->
             <div>
                 @if (Auth::check())
-                    @if ($project->id_owner != Auth::id())
+                    @if ($project->owner_id != Auth::id())
                         @if (!Auth::user()->belongstoTeam($team))
                             @if (isset($isAlreadyJoinRequest))
                                 <div class="text-red-600">
@@ -95,6 +95,25 @@
                     </div>
                 @endif
 
+            </div>
+            <!-- Status du projet -->
+            <div>
+                @switch($project->status_id)
+                    @case(1)
+                        <div class="text-green-400">
+                            Ouvert
+                        </div>
+                        @break
+                   @case(2)
+                        <div class="text-red-400">
+                            Fermé
+                        </div>
+                        @break
+                    @case(3)
+                        <div class="text-indigo-400">
+                            Recrute
+                        </div>
+                @endswitch
             </div>
 
         </div>

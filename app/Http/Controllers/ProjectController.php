@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Team;
 use App\Models\User;
+use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
@@ -32,7 +33,7 @@ class ProjectController extends Controller
      * Create a new project
      */
     public function create(Request $request) {
-        
+
         $image = $this->isImage($request);
 
         // Store project in database
@@ -40,21 +41,22 @@ class ProjectController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'image' => (isset($image)) ? 'storage/projects/images/' . $image : "storage/projects/images/default.jpg",
-            'id_owner' => Auth::id(),
+            'owner_id' => Auth::id(),
+            'status_id' => $request->status
         ]);
 
         Team::create([
             'name' => $request->title,
             'personal_team' => 1,
             'user_id' => Auth::id(),
-            'project_id' => $project->id
+            'project_id' => $project->id,
         ]);
 
         return to_route('project.create.post');
     }
 
     public function delete(Request $request) {
-        if ($request->id_owner == Auth::id()) {
+        if ($request->owner_id == Auth::id()) {
             Project::destroy($request->id);
             Team::where('project_id', $request->id)->delete();
         }
@@ -67,15 +69,15 @@ class ProjectController extends Controller
         $owner_project = User::where('id', $team->user_id)->first();
         $users_id = TeamUser::where('team_id', $team->id)->pluck('user_id')->toArray();
         $users_belongs_project = User::whereIn('id', $users_id)->get();
-        
+
         $isAlreadyJoinRequest = TeamJoinRequest::where('user_id', Auth::id())->where('team_id', $team->id)->first();
-        
+
         return view('project.show',[
             'project' => $project,
             'users' => $users_belongs_project,
             'owner' => $owner_project,
             'team' => $team,
-            'isAlreadyJoinRequest' => $isAlreadyJoinRequest
+            'isAlreadyJoinRequest' => $isAlreadyJoinRequest,
         ]);
     }
 
@@ -92,10 +94,13 @@ class ProjectController extends Controller
 
         $image = $this->isImage($request);
 
+        $statuses = Status::find($project->id);
+
         $project->update([
             'title' => $request->title,
             'description' => $request->description,
-            'image' => (isset($image)) ? 'storage/projects/images/' . $image : $project->image
+            'image' => (isset($image)) ? 'storage/projects/images/' . $image : $project->image,
+            'status_id' => $request->status
         ]);
 
         return to_route('home');
@@ -104,8 +109,11 @@ class ProjectController extends Controller
     public function updateForm(int $id) {
         $project = Project::find($id);
 
+        $statuses = Status::all();
+
         return view('project.update', [
-            'project' => $project
+            'project' => $project,
+            'statuses' => $statuses,
         ]);
     }
 }

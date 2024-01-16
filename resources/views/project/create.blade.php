@@ -19,6 +19,11 @@
                 @csrf
                 <input class="text-xl font-semibold" name="title" placeholder="Nom du projet..." type="text">
                 <input class="text-xl font-semibold" name="description" type="text">
+                <select name="status">
+                    @foreach (\App\Models\Status::all() as $status)
+                        <option value="{{ $status->id }}">{{ $status->name }}</option>
+                    @endforeach
+                </select>
                 <input type="file" name="image" accept="image/*">
                 <button>Envoyer</button>
             </form>
