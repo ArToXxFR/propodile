@@ -54,13 +54,11 @@
             <!-- Button to delete the project -->
             <div>
                 @if ($project->owner_id == Auth::id())
-                    <form action="{{ route("project.delete") }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer ce projet?')">
+                    <form action="{{ route("project.delete", ['id' => $project->id]) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer ce projet?')">
                         @csrf
-                        <input type="hidden" value="{{ $project->id }}" name="id">
-                        <input type="hidden" value="{{ $project->owner_id }}" name="owner_id">
+                        @method('DELETE')
                         <button type="submit" class="text-indigo-600">Supprimer le projet</button>
                     </form>
-
                 @endif
             </div>
             <div>
@@ -78,7 +76,7 @@
                                     Demande en attente
                                 </div>
                             @else
-                                <form action="{{ route("team.join") }}" method="GET" onsubmit="return confirm('Voulez-vous vraiment demander à rejoindre le projet ?')">
+                                <form action="{{ route("team.join") }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment demander à rejoindre le projet ?')">
                                     @csrf
                                     <input type="hidden" value="{{ $project->id }}" name="id">
                                     <input type="hidden" value="{{ $project->team_id }}" name="team_id">

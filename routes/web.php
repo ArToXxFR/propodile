@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ProjectController::class, 'showAll'])->name('home');
+Route::get('/', [ProjectController::class, 'index'])->name('home');
 
 Route::middleware([
     'auth:sanctum',
@@ -33,22 +33,22 @@ Route::middleware([
     Route::post('/project/create', [ProjectController::class, 'create'])
     ->name('project.create.post');
 
-    Route::post('/project/delete', [ProjectController::class, 'delete'])
+    Route::delete('/project/delete/{id}', [ProjectController::class, 'delete'])
     ->name('project.delete');
 
-    Route::post('/project/update', [ProjectController::class, 'update'])
+    Route::put('/project/update/{id}', [ProjectController::class, 'update'])
     ->name('project.update');
 
     Route::get('/project/update/{id}', [ProjectController::class, 'updateForm'])->name('project.update.form');
 
-    Route::get('/team/join', [TeamController::class, 'joinRequest'])
+    Route::post('/team/join', [TeamController::class, 'sendInvitation'])
     ->name('team.join');
 
-    Route::get('/team/accept/{id}', [TeamController::class, 'acceptRequest'])
+    Route::get('/team/accept/{id}', [TeamController::class, 'acceptInvitation'])
     ->name('team.accept');
 });
 
-Route::get('/project/show', [ProjectController::class, 'showAll'])
+Route::get('/project/show', [ProjectController::class, 'index'])
 ->name('project.show');
 Route::get('/project/show/{id}', [ProjectController::class, 'show'])
 ->name('project.show');

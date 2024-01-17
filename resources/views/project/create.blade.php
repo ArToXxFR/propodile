@@ -18,7 +18,13 @@
             <form action="{{ route('project.create.post')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input class="text-xl font-semibold" name="title" placeholder="Nom du projet..." type="text">
+                @error('title')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <input class="text-xl font-semibold" name="description" type="text">
+                @error('description')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <select name="status">
                     @foreach (\App\Models\Status::all() as $status)
                         <option value="{{ $status->id }}">{{ $status->name }}</option>
