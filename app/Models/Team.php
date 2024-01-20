@@ -21,11 +21,6 @@ class Team extends JetstreamTeam
         'personal_team' => 'boolean',
     ];
 
-    public static $rules = [
-        'team_id' => 'required|exists:team_join_requests,team_id',
-        'user_id' => 'required|exists:team_join_requests,user_id',
-    ];
-
     /**
      * The attributes that are mass assignable.
      *

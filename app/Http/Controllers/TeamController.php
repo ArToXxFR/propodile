@@ -20,12 +20,6 @@ class TeamController extends Controller
 {
     public function sendInvitation(Request $request): RedirectResponse
     {
-        $validator = Validator::make($request->all(), Team::$rules);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         try {
             $user = User::findOrFail(Auth::id());
             $team = Team::where('project_id', $request->id)->firstOrFail();
@@ -42,7 +36,7 @@ class TeamController extends Controller
                 return redirect()->back()->withErrors(['message' => "Le mail n'a pas pu être envoyé."]);
             }
 
-                return to_route('home')->with('status', 'La demande a bien été envoyée.');
+            return to_route('home')->with('status', 'La demande a bien été envoyée.');
         } catch (ModelNotFoundException $e) {
             Log::error("Utilisateur ou Equipe non trouvés : " . $e->getMessage());
             return redirect()->back()->withErrors(['message' => 'L\'invitation n\'a pas pu être envoyée.']);

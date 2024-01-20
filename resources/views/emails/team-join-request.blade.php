@@ -19,5 +19,9 @@
 {{ __('Accepter la demande') }}
 @endcomponent
 
+@component('mail::button', ['url' => $acceptUrl])
+    {{ __('Voir le profil') }}
+@endcomponent
+
 {{ __('If you did not expect to receive an invitation to this team, you may discard this email.') }}
 @endcomponent

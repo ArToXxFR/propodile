@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\LoginRegisterController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
@@ -52,4 +52,7 @@ Route::get('/project/show', [ProjectController::class, 'index'])
 ->name('project.show');
 Route::get('/project/show/{id}', [ProjectController::class, 'show'])
 ->name('project.show');
+
+Route::get('/{username}', [ProfileController::class, 'show'])
+    ->name('user.show');
 
