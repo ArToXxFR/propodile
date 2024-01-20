@@ -95,7 +95,7 @@ class ProjectController extends Controller
 
             Project::destroy($projectId);
             Team::where('project_id', $projectId)->delete();
-            
+
             return to_route('home');
         } catch (ModelNotFoundException $e) {
             Log::error("Le projet à supprimer n'a pas été trouvé : " . $e->getMessage());
@@ -170,6 +170,10 @@ class ProjectController extends Controller
     {
         try {
             $team = Team::where('project_id', $projectId)->firstorFail();
+            $project = Project::findOrFail($projectId);
+            $image = $this->isImage($request);
+
+
             if (Gate::denies('update-project', $team)) {
                 abort(403);
             }
@@ -180,14 +184,15 @@ class ProjectController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            $project = Project::findOrFail($projectId);
-            $image = $this->isImage($request);
-
             $project->update([
                 'title' => $request->title,
                 'description' => $request->description,
                 'image' => (isset($image)) ? 'storage/projects/images/' . $image : $project->image,
                 'status_id' => $request->status
+            ]);
+
+            $team->update([
+                'name' => $request->title
             ]);
 
             return to_route('home');

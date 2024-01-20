@@ -2,6 +2,7 @@
 
 namespace App\Actions\Jetstream;
 
+use App\Models\Project;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
@@ -23,8 +24,15 @@ class UpdateTeamName implements UpdatesTeamNames
             'name' => ['required', 'string', 'max:255'],
         ])->validateWithBag('updateTeamName');
 
+        $project = Project::where('id', $team->project_id);
+
+        $project->update([
+            'title' => $input['name']
+        ]);
+
         $team->forceFill([
             'name' => $input['name'],
         ])->save();
+
     }
 }
