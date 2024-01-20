@@ -23,9 +23,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+
     Route::get('/project/create', function() {
         return view('project.create');
     })->name('project.create.get');
@@ -46,6 +44,9 @@ Route::middleware([
 
     Route::get('/team/accept/{id}', [TeamController::class, 'acceptInvitation'])
     ->name('team.accept');
+
+    Route::get('/dashboard', [TeamController::class, 'dashboard'])
+        ->name('dashboard');
 });
 
 Route::get('/project/show', [ProjectController::class, 'index'])

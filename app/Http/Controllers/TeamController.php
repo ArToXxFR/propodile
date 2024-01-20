@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use App\Models\Team;
 use App\Models\TeamJoinRequest;
 use App\Mail\MailJoinRequest;
@@ -73,6 +74,22 @@ class TeamController extends Controller
         } catch (\Exception $e) {
             Log::error("Erreur lors de l'acceptation de l'invitation :" . $e->getMessage());
             return redirect()->back()->withErrors(['message' => 'Erreur lors de l\'acceptation de l\'invitation .']);
+        }
+    }
+
+    public function dashboard()
+    {
+        try {
+            $user = Auth::user();
+            $teams = $user->allTeams();
+
+            return view('dashboard', [
+                'teams' => $teams,
+                'user' => $user
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Erreur lors de la récupération des projets :" . $e->getMessage());
+            return redirect()->back()->withErrors(['message' => "Erreur lors de la récupération des projets."]);
         }
     }
 }
