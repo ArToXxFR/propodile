@@ -30,7 +30,7 @@ class TeamController extends Controller
                 'team_id' => $team->id,
             ]);
             try {
-                Mail::to($owner->email)->send(new MailJoinRequest($user->name, $team->id));
+                Mail::to($owner->email)->send(new MailJoinRequest($user->username, $team->id));
             } catch (\Exception $e) {
                 Log::error("Impossible d'envoyer le mail : " . $e->getMessage());
                 return redirect()->back()->withErrors(['message' => "Le mail n'a pas pu être envoyé."]);
@@ -59,7 +59,7 @@ class TeamController extends Controller
             TeamUser::create([
                 'user_id' => $request->user_id,
                 'team_id' => $request->team_id,
-                'role' => 'editor'
+                'role' => 'guest'
             ]);
 
             $request->delete();

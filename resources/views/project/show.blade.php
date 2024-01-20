@@ -35,14 +35,14 @@
                 Description : {{ $project->description }}
             </div>
             <!-- List of members -->
-            <span class="text-indigo-600">Owner : {{ $owner->name }}</span>
+            <span class="text-indigo-600">Owner : {{ $owner->username }}</span>
             <div>
                 <span class="text-indigo-600">Liste des membres :</span>
                 <ul>
                     @if (!$users->isEmpty())
                         @foreach ($users as $user)
                             <li class="text-indigo-600">
-                                - {{ $user->name }}
+                                - {{ $user->username }}
                             </li>
                         @endforeach
                     @else
@@ -53,23 +53,24 @@
 
             <!-- Button to delete the project -->
             <div>
-                @if ($project->owner_id == Auth::id())
+                @can('delete-project', $team)
                     <form action="{{ route("project.delete", ['id' => $project->id]) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer ce projet?')">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="text-indigo-600">Supprimer le projet</button>
                     </form>
-                @endif
+                @endcan
             </div>
+            <!-- Button to modify the project -->
             <div>
-                @if ($project->owner_id == Auth::id())
+                @can('update-project', $team)
                     <a href="{{ route("project.update.form", ['id' => $project->id]) }}" class="text-indigo-600">Modifier le projet</a>
-                @endif
+                @endcan
             </div>
             <!-- Ask to join project / Invite members -->
             <div>
                 @if (Auth::check())
-                    @if ($project->owner_id != Auth::id())
+                    @cannot ('invite-members-project', $team)
                         @if (!Auth::user()->belongstoTeam($team))
                             @if (isset($isAlreadyJoinRequest))
                                 <div class="text-red-600">
@@ -86,7 +87,7 @@
                         @endif
                     @else
                         <a href="{{ route('teams.show', $project->id) }}" :active="request()->routeIs('teams.show')" class="text-indigo-800">Inviter des membres</a>
-                    @endif
+                    @endcannot
                 @else
                     <div class="text-red-600">
                         Vous devez être connecté pour interagir avec le projet.

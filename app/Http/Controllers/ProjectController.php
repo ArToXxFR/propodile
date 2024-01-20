@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TeamJoinRequest;
 use App\Models\TeamUser;
 use Faker\Factory;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -87,6 +88,10 @@ class ProjectController extends Controller
     public function delete(int $projectId): RedirectResponse
     {
         try {
+            $team = Team::where('project_id', $projectId)->firstorFail();
+            if (Gate::denies('delete-project', $team)) {
+                abort(403);
+            }
             $project = Project::findOrFail($projectId);
             if ($project->owner_id == Auth::id()) {
                 Project::destroy($projectId);
@@ -164,13 +169,18 @@ class ProjectController extends Controller
      */
     public function update(Request $request, int $projectId): RedirectResponse
     {
-        $validator = Validator::make($request->all(), Project::$rules, Project::$messages);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         try {
+            $team = Team::where('project_id', $projectId)->firstorFail();
+            if (Gate::denies('update-project', $team)) {
+                abort(403);
+            }
+
+            $validator = Validator::make($request->all(), Project::$rules, Project::$messages);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
             $project = Project::findOrFail($projectId);
             $image = $this->isImage($request);
 
@@ -194,14 +204,20 @@ class ProjectController extends Controller
     /**
      *  Redirect to update form
      *
-     * @param int $id
+     * @param int $projectId
      * @return View|RedirectResponse
      */
-    public function updateForm(int $id): View|RedirectResponse
+    public function updateForm(int $projectId): View|RedirectResponse
     {
         try {
-            $project = Project::findOrFail($id);
+
+            $project = Project::findOrFail($projectId);
             $statuses = Status::all();
+            $team = Team::where('project_id', $projectId)->firstOrFail();
+
+            if (Gate::denies('update-project', ['team' => $team])) {
+                abort(403);
+            }
 
             return view('project.update', [
                 'project' => $project,

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -21,6 +22,15 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::define('update-project', function ($user, $team) {
+            return $user->hasTeamRole($team, 'editor') ||
+                $user->hasTeamRole($team, 'admin') ||
+                $user->hasTeamRole($team, 'owner');
+        });
+
+        Gate::define('delete-project', function ($user, $team) {
+            return $user->hasTeamRole($team, 'owner');
+        });
+
     }
 }
