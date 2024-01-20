@@ -92,11 +92,10 @@ class ProjectController extends Controller
             if (Gate::denies('delete-project', $team)) {
                 abort(403);
             }
-            $project = Project::findOrFail($projectId);
-            if ($project->owner_id == Auth::id()) {
-                Project::destroy($projectId);
-                Team::where('project_id', $projectId)->delete();
-            }
+
+            Project::destroy($projectId);
+            Team::where('project_id', $projectId)->delete();
+            
             return to_route('home');
         } catch (ModelNotFoundException $e) {
             Log::error("Le projet à supprimer n'a pas été trouvé : " . $e->getMessage());
