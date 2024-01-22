@@ -25,11 +25,15 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('update-project', function ($user, $team) {
             return $user->hasTeamRole($team, 'editor') ||
                 $user->hasTeamRole($team, 'admin') ||
-                $user->hasTeamRole($team, 'owner');
+                $user->hasTeamRole($team, 'owner') ||
+                $user->role == 'admin' ||
+                $user->role == 'moderator';
         });
 
         Gate::define('delete-project', function ($user, $team) {
-            return $user->hasTeamRole($team, 'owner');
+            return $user->hasTeamRole($team, 'owner') ||
+                $user->role == 'admin' ||
+                $user->role == 'moderator';
         });
 
     }
