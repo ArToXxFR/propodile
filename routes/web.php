@@ -54,8 +54,15 @@ Route::middleware([
         Route::get('/admin/users', [AdminController::class, 'listUsers'])
             ->name('admin.users');
 
+        Route::middleware([CheckAdmin::class])->group(function() {
+            Route::get('/admin/users/banned', [AdminController::class, 'listBannedUsers'])
+                ->name('admin.users.banned');
+
         Route::get('/admin/projects', [AdminController::class, 'listProjects'])
             ->name('admin.projects');
+
+        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
+            ->name('admin.dashboard');
     });
 });
 
