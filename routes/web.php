@@ -39,7 +39,8 @@ Route::middleware([
     Route::put('/project/update/{id}', [ProjectController::class, 'update'])
     ->name('project.update');
 
-    Route::get('/project/update/{id}', [ProjectController::class, 'updateForm'])->name('project.update.form');
+    Route::get('/project/update/{id}', [ProjectController::class, 'updateForm'])
+        ->name('project.update.form');
 
     Route::post('/team/join', [TeamController::class, 'sendInvitation'])
     ->name('team.join');
@@ -54,9 +55,8 @@ Route::middleware([
         Route::get('/admin/users', [AdminController::class, 'listUsers'])
             ->name('admin.users');
 
-        Route::middleware([CheckAdmin::class])->group(function() {
-            Route::get('/admin/users/banned', [AdminController::class, 'listBannedUsers'])
-                ->name('admin.users.banned');
+        Route::get('/admin/users/banned', [AdminController::class, 'listBannedUsers'])
+            ->name('admin.users.banned');
 
         Route::get('/admin/projects', [AdminController::class, 'listProjects'])
             ->name('admin.projects');
