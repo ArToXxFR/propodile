@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TeamController;
+use App\Http\Middleware\CheckAdmin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,6 +49,14 @@ Route::middleware([
 
     Route::get('/dashboard', [TeamController::class, 'dashboard'])
         ->name('dashboard');
+
+    Route::middleware([CheckAdmin::class])->group(function() {
+        Route::get('/admin/users', [AdminController::class, 'listUsers'])
+            ->name('admin.users');
+
+        Route::get('/admin/projects', [AdminController::class, 'listProjects'])
+            ->name('admin.projects');
+    });
 });
 
 Route::get('/project/show', [ProjectController::class, 'index'])
