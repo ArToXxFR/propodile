@@ -16,13 +16,15 @@ use App\Models\User;
 use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use Intervention\Image\ImageManager;
 use Mockery\Exception;
+use Intervention\Image\Image;
 
 class ProjectController extends Controller
 {
-
     private function isImage(Request $request): string|null
     {
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -31,8 +33,14 @@ class ProjectController extends Controller
             // Générer un nom unique pour le fichier image
             $imageName = uniqid('image_') . '.' . $image->getClientOriginalExtension();
 
-            // Stocker le fichier image dans le répertoire "public/images"
-            $image->storeAs('projects/images', $imageName, 'public');
+            $manager = new ImageManager(
+                new \Intervention\Image\Drivers\Gd\Driver()
+            );
+            // Redimensionnement de l'image avant de la stocker
+            $resizedImage = $manager->read($image)->resize(500, 500);
+
+            // Stocker le fichier image redimensionné dans le répertoire "public/projects/images"
+            Storage::put('public/projects/images/' . $imageName, $resizedImage->encode());
 
             return $imageName;
         } else {

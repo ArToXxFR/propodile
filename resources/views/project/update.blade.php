@@ -1,13 +1,58 @@
-<form action="{{ route('project.update', ['id' => $project->id]) }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    @method('PUT')
-    <input class="text-xl font-semibold" name="title" placeholder="Nom du projet..." type="text" value="{{ $project->title }}">
-    <input class="text-xl font-semibold" name="description" type="text" value="{{ $project->description }}">
-    <select name="status">
-        @foreach ($statuses as $status)
-            <option value="{{ $status->id }}" {{ $project->status_id == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
-        @endforeach
-    </select>
-    <input type="file" name="image" accept="image/*">
-    <button>Modifier</button>
-</form>
+<x-guest-layout>
+    <x-project-card>
+        <x-slot name="logo">
+            <x-authentication-card-logo />
+        </x-slot>
+
+        <x-validation-errors class="mb-6" />
+
+        <div class="text-2xl font-semibold text-center mb-8">{{ __($project->title) }}</div>
+
+        <form action="{{ route('project.update', ['id' => $project->id]) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="mt-6">
+                <x-label for="title" value="{{ __('Nom du projet') }}" class="text-lg" />
+                <x-input id="title" class="block w-full mt-2" type="text" name="title" required autofocus  value="{{ $project->title }}"/>
+            </div>
+
+            <div class="mt-6 relative">
+                <x-label for="description" value="{{ __('Description') }}" class="text-lg" />
+                <x-textarea id="description" class="block w-full mt-2 h-40" type="text" name="description" required>{{ old('description', $project->description) }}</x-textarea>
+                <div class="absolute bottom-2 right-2 text-gray-400">
+                    <span id="charCount">{{ mb_strlen(old('description', $project->description)) }}</span>/1080
+                </div>
+            </div>
+
+
+            <div class="mt-6">
+                <x-label for="status" value="{{ __('Status') }}" class="text-lg" />
+                <x-select name="status" class="block w-full">
+                    @foreach ($statuses as $status)
+                        <option value="{{ $status->id }}" {{ $project->status_id == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
+                    @endforeach
+                </x-select>
+            </div>
+
+            <div class="mt-6">
+                <x-label for="image" value="{{ __('Image') }}" class="text-lg" />
+                <x-input type="file" name="image" id="image" accept="image/*" class="mt-2 max-w-full" />
+                <p class="mt-2 text-gray-500 text-sm">Conseillé : Image de 500x500 pixels.</p>
+            </div>
+
+
+            <div class="mt-8 text-center">
+                <x-button>
+                    {{ __('Modifier le projet') }}
+                </x-button>
+            </div>
+        </form>
+    </x-project-card>
+</x-guest-layout>
+
+<script>
+    document.getElementById('description').addEventListener('input', function () {
+        var charCount = this.value.length;
+        document.getElementById('charCount').innerText = charCount;
+    });
+</script>

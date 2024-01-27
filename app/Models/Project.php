@@ -32,4 +32,8 @@ class Project extends Model
     public function owner(): BelongsTo {
         return $this->belongsTo(User::class);
     }
+
+    public function status(): belongsTo {
+        return $this->belongsTo(Status::class);
+    }
 }

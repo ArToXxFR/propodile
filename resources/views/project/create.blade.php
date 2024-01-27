@@ -1,36 +1,57 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<x-guest-layout>
+    <x-project-card>
+        <x-slot name="logo">
+            <x-authentication-card-logo />
+        </x-slot>
 
-        <title>Tous les projets</title>
+        <x-validation-errors class="mb-6" />
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        <div class="text-2xl font-semibold text-center mb-8">{{ __('Créer un nouveau projet') }}</div>
 
-        <!-- Styles -->
-        @vite('resources/css/app.css')
-    </head>
-    <body>
-        <div class="flex flex-wrap justify-center w-screen">
-            <form action="{{ route('project.create.post')}}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input class="text-xl font-semibold" name="title" placeholder="Nom du projet..." type="text">
-                @error('title')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-                <input class="text-xl font-semibold" name="description" type="text">
-                @error('description')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-                <select name="status">
+        <form action="{{ route('project.create.post') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
+            <div class="mt-6">
+                <x-label for="title" value="{{ __('Nom du projet') }}" class="text-lg" />
+                <x-input id="title" class="block w-full mt-2" type="text" name="title" required autofocus />
+            </div>
+
+            <div class="mt-6 relative">
+                <x-label for="description" value="{{ __('Description') }}" class="text-lg" />
+                <x-textarea id="description" class="block w-full mt-2 h-40" type="text" name="description" required>{{ old('description') }}</x-textarea>
+                <div class="absolute bottom-2 right-2 text-gray-400">
+                    <span id="charCount">{{ mb_strlen(old('description')) }}</span>/1080
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <x-label for="status" value="{{ __('Status') }}" class="text-lg" />
+                <x-select name="status" class="block w-full">
                     @foreach (\App\Models\Status::all() as $status)
                         <option value="{{ $status->id }}">{{ $status->name }}</option>
                     @endforeach
-                </select>
-                <input type="file" name="image" accept="image/*">
-                <button>Envoyer</button>
-            </form>
-        </div>
+                </x-select>
+            </div>
+
+            <div class="mt-6">
+                <x-label for="image" value="{{ __('Image') }}" class="text-lg" />
+                <x-input type="file" name="image" id="image" accept="image/*" class="mt-2 max-w-full" />
+                <p class="mt-2 text-gray-500 text-sm">Conseillé : Image de 500x500 pixels.</p>
+            </div>
+
+
+            <div class="mt-8 text-center">
+                <x-button>
+                    {{ __('Créer un projet') }}
+                </x-button>
+            </div>
+        </form>
+    </x-project-card>
+</x-guest-layout>
+
+<script>
+    document.getElementById('description').addEventListener('input', function () {
+        var charCount = this.value.length;
+        document.getElementById('charCount').innerText = charCount;
+    });
+</script>
