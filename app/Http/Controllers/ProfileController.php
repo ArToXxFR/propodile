@@ -22,7 +22,7 @@ class ProfileController extends Controller
             ]);
         } catch (ModelNotFoundException $e) {
             Log::error("Utilisateur non trouvé : " . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => 'L\'utilisateur n\'a pas été trouvé.']);
+            return abort(404);
         } catch (\Exception $e) {
             Log::error("Impossible de trouver l'utilisateur :" . $e->getMessage());
             return redirect()->back()->withErrors("Impossible de trouver l'utilisateur.");

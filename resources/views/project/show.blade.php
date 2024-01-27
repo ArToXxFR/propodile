@@ -26,8 +26,9 @@
                         <div class='text-blue-700 font-bold text-xl mb-2'>
                             Description
                         </div>
+                        <hr class="my-4 border-t-1 border-gray-300">
                         <p class='text-gray-800 break-words whitespace-pre-line overflow-auto h-[60vh]'>
-                            {{ $project->description }}
+                        {{ $project->description }}
                         </p>
                     </div>
                 </div>

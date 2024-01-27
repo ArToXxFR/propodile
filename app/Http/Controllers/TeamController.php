@@ -70,7 +70,7 @@ class TeamController extends Controller
             );
         } catch (ModelNotFoundException $e) {
             Log::error("Invitation non trouvée : " . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => 'L\'invitation n\'a pas été trouvée.']);
+            return abort(404);
         } catch (\Exception $e) {
             Log::error("Erreur lors de l'acceptation de l'invitation :" . $e->getMessage());
             return redirect()->back()->withErrors(['message' => 'Erreur lors de l\'acceptation de l\'invitation .']);

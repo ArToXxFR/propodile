@@ -141,7 +141,7 @@ class ProjectController extends Controller
             ]);
         } catch (ModelNotFoundException $e) {
             Log::error("Impossible de récupérer les informations du projet.");
-            return redirect()->back()->withErrors("Impossible de récupérer les informations du projet.");
+            return abort(404);
         } catch (\Exception $e) {
             Log::error("Une erreur s'est produite lors de la récupération de projet : " . $e->getMessage());
             return redirect()->back()->withErrors("Une erreur s'est produite.");
