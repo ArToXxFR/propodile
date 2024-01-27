@@ -35,6 +35,13 @@
             </div>
 
             <div class="mt-6">
+                <x-label for="tags" value="{{ __('Technologies') }}" class="text-lg" />
+                <x-input id="tags" class="block w-full mt-2" type="text" name="tags" value="{{ $tags }}" placeholder="Exemple : Docker, Laravel, ect..."/>
+                <p class="text-gray-900">Conseil : Séparer les technologies par des virgules.</p>
+                <p class="text-red-500" id="tagError"></p>
+            </div>
+
+            <div class="mt-6">
                 <x-label for="image" value="{{ __('Image') }}" class="text-lg" />
                 <x-input type="file" name="image" id="image" accept="image/*" class="mt-2 max-w-full" />
                 <p class="mt-2 text-gray-500 text-sm">Conseillé : Image de 500x500 pixels.</p>
@@ -52,7 +59,7 @@
 
 <script>
     document.getElementById('description').addEventListener('input', function () {
-        var charCount = this.value.length;
+        let charCount = this.value.length;
         document.getElementById('charCount').innerText = charCount;
     });
 </script>

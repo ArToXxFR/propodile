@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\TeamJoinRequest;
 use App\Models\TeamUser;
 use Faker\Factory;
@@ -79,7 +80,15 @@ class ProjectController extends Controller
                 'project_id' => $project->id,
             ]);
 
-            return to_route('project.create.post');
+            $tags = $request->input('tags');
+
+            $tags = explode(',', $tags);
+
+            foreach ($tags as $tag) {
+                Tag::create(['name' => $tag, 'project_id' => $project->id]);
+            }
+
+            return to_route('project.show', ['id' => $project->id]);
         } catch (\Exception $e) {
             Log::error("Impossible de créer le projet ou l'équipe : " . $e->getMessage());
             return redirect()->back()->withErrors("Impossible de créer le projet ou l'équipe.");
@@ -103,6 +112,7 @@ class ProjectController extends Controller
 
             Project::destroy($projectId);
             Team::where('project_id', $projectId)->delete();
+            Tag::where('project_id', $projectId)->delete();
 
             return to_route('home');
         } catch (ModelNotFoundException $e) {
@@ -129,6 +139,7 @@ class ProjectController extends Controller
             $owner_project = User::where('id', $team->user_id)->firstOrFail();
             $users_id = TeamUser::where('team_id', $team->id)->pluck('user_id')->toArray();
             $users_belongs_project = User::whereIn('id', $users_id)->get();
+            $tags = Tag::all()->where('project_id', $project->id)->pluck('name')->toArray();
 
             $isAlreadyJoinRequest = TeamJoinRequest::where('user_id', Auth::id())->where('team_id', $team->id)->first();
 
@@ -138,6 +149,7 @@ class ProjectController extends Controller
                 'owner' => $owner_project,
                 'team' => $team,
                 'isAlreadyJoinRequest' => $isAlreadyJoinRequest,
+                'tags' => $tags
             ]);
         } catch (ModelNotFoundException $e) {
             Log::error("Impossible de récupérer les informations du projet.");
@@ -180,7 +192,8 @@ class ProjectController extends Controller
             $team = Team::where('project_id', $projectId)->firstorFail();
             $project = Project::findOrFail($projectId);
             $image = $this->isImage($request);
-
+            $oldTags = Tag::all()->where('project_id', $project->id)->pluck('name')->toArray();
+            $newTags = explode(',', $request->tags);
 
             if (Gate::denies('update-project', $team)) {
                 abort(403);
@@ -190,6 +203,17 @@ class ProjectController extends Controller
 
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            $tagsToDelete = array_diff($oldTags, $newTags);
+            $tagsToCreate = array_diff($newTags, $oldTags);
+
+            Tag::whereIn('name', $tagsToDelete)->delete();
+
+            foreach ($tagsToCreate as $tagName) {
+                if (!empty($tagName)) {
+                    Tag::create(['name' => $tagName, 'project_id' => $projectId]);
+                }
             }
 
             $project->update([
@@ -202,6 +226,8 @@ class ProjectController extends Controller
             $team->update([
                 'name' => $request->title
             ]);
+
+            $tagName = $request->input('tags_array');
 
             return to_route('home');
         } catch (ModelNotFoundException $e) {
@@ -226,6 +252,9 @@ class ProjectController extends Controller
             $project = Project::findOrFail($projectId);
             $statuses = Status::all();
             $team = Team::where('project_id', $projectId)->firstOrFail();
+            $tags = Tag::all()->where('project_id', $project->id)->pluck('name')->toArray();
+
+            $tags = implode(',', $tags);
 
             if (Gate::denies('update-project', ['team' => $team])) {
                 abort(403);
@@ -234,6 +263,7 @@ class ProjectController extends Controller
             return view('project.update', [
                 'project' => $project,
                 'statuses' => $statuses,
+                'tags' => $tags
             ]);
         } catch (ModelNotFoundException $e) {
             Log::error('Le projet n\'a pas été trouvé : ' . $e->getMessage());

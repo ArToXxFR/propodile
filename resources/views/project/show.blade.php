@@ -28,10 +28,25 @@
                         </div>
                         <hr class="my-4 border-t-1 border-gray-300">
                         <p class='text-gray-800 break-words whitespace-pre-line overflow-auto h-[60vh]'>
-                        {{ $project->description }}
+                            {{ $project->description }}
                         </p>
+
+                        <!-- Section pour afficher les technologies -->
+                        <div class="mt-4">
+                            <div class="text-blue-700 font-bold text-xl mb-2">
+                                Technologies
+                            </div>
+                            @forelse ($project->tags as $tag)
+                                <span class="inline-block bg-blue-500 text-white px-2 py-1 rounded-full mr-2 mb-2">
+                                {{ $tag->name }}
+                            </span>
+                            @empty
+                                <p class="text-gray-500">Aucune technologie associée.</p>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
+
 
                 <!-- Right column for the other information -->
                 <div class="w-full h-full md:w-3/12">
