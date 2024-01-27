@@ -36,5 +36,9 @@ class AuthServiceProvider extends ServiceProvider
                 $user->role == 'moderator';
         });
 
+        Gate::define('invite-member-project', function($user, $team) {
+            return $user->hasTeamRole($team, 'owner') ||
+                $user->hasTeamRole($team, 'admin');
+        });
     }
 }

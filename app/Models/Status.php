@@ -12,7 +12,7 @@ class Status extends Model
 
     public $timestamps = false;
 
-    public function users(): HasMany {
-        return $this->hasMany(User::class);
+    public function projects(): HasMany {
+        return $this->hasMany(Project::class);
     }
 }

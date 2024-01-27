@@ -16,10 +16,14 @@
                 <x-input id="title" class="block w-full mt-2" type="text" name="title" required autofocus  value="{{ $project->title }}"/>
             </div>
 
-            <div class="mt-6">
+            <div class="mt-6 relative">
                 <x-label for="description" value="{{ __('Description') }}" class="text-lg" />
-                <x-textarea id="description" class="block w-full mt-2 h-40" type="text" name="description" required>{{ $project->description }}</x-textarea>
+                <x-textarea id="description" class="block w-full mt-2 h-40" type="text" name="description" required>{{ old('description', $project->description) }}</x-textarea>
+                <div class="absolute bottom-2 right-2 text-gray-400">
+                    <span id="charCount">{{ mb_strlen(old('description', $project->description)) }}</span>/1080
+                </div>
             </div>
+
 
             <div class="mt-6">
                 <x-label for="status" value="{{ __('Status') }}" class="text-lg" />
@@ -33,7 +37,9 @@
             <div class="mt-6">
                 <x-label for="image" value="{{ __('Image') }}" class="text-lg" />
                 <x-input type="file" name="image" id="image" accept="image/*" class="mt-2 max-w-full" />
+                <p class="mt-2 text-gray-500 text-sm">Conseillé : Image de 500x500 pixels.</p>
             </div>
+
 
             <div class="mt-8 text-center">
                 <x-button>
@@ -43,3 +49,10 @@
         </form>
     </x-project-card>
 </x-guest-layout>
+
+<script>
+    document.getElementById('description').addEventListener('input', function () {
+        var charCount = this.value.length;
+        document.getElementById('charCount').innerText = charCount;
+    });
+</script>
