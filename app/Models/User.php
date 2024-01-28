@@ -10,6 +10,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class User extends Authenticatable
 {
@@ -61,6 +63,11 @@ class User extends Authenticatable
 
     public function teams_users() {
         return $this->belongsToMany(TeamUser::class);
+    }
+
+    public function projects(): hasMany
+    {
+        return $this->hasMany(Project::class);
     }
 
     public function grade() {
