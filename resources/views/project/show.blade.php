@@ -86,7 +86,7 @@
 
                         <!-- Statut du projet -->
                         <div class="mt-6 text-center">
-                            <div class="text-blue-700 font-bold text-lg mb-2">Statut :</div>
+                            <div class="text-blue-700 font-bold text-lg mb-2">Statut</div>
                             @switch($project->status_id)
                                 @case(1)
                                     <span class="inline-block px-8 py-2 bg-green-500 text-white rounded-full">
@@ -128,7 +128,7 @@
                                             @endif
                                         @endunless
                                     @else
-                                        <a href="{{ route('teams.show', $project->id) }}" :active="request()->routeIs('teams.show')" class="inline-flex items-center justify-center w-full px-4 py-2 border border-yellow-500 text-sm leading-5 font-medium rounded-md text-yellow-500 hover:bg-yellow-100 hover:text-yellow-600 focus:outline-none focus:border-yellow-600 focus:shadow-outline-yellow active:bg-yellow-200 active:text-yellow-600 transition duration-150 ease-in-out">
+                                        <a href="{{ route('teams.show', $project->id) }}" :active="request()->routeIs('teams.show')" class="inline-flex items-center justify-center w-full px-4 py-2 border border-yellow-600 text-sm leading-5 font-medium rounded-md text-yellow-600 hover:bg-yellow-100 hover:text-yellow-700 focus:outline-none focus:border-yellow-700 focus:shadow-outline-yellow active:bg-yellow-200 active:text-yellow-700 transition duration-150 ease-in-out">
                                             Gérer les membres
                                         </a>
                                     @endcannot
@@ -142,7 +142,7 @@
                             <!-- Boutons pour supprimer et modifier le projet -->
                             @can('update-project', $team)
                                 <div class="w-full mx-auto">
-                                    <a href="{{ route("project.update.form", ['id' => $project->id]) }}" class="w-full inline-flex items-center justify-center px-6 py-2 border border-yellow-500 text-sm leading-5 font-medium rounded-md text-yellow-500 hover:bg-yellow-100 focus:outline-none focus:border-yellow-600 focus:shadow-outline-yellow active:bg-yellow-200 transition duration-150 ease-in-out">
+                                    <a href="{{ route("project.update.form", ['id' => $project->id]) }}" class="w-full inline-flex items-center justify-center px-6 py-2 border border-blue-500 text-sm leading-5 font-medium rounded-md text-blue-700 hover:bg-blue-100 focus:outline-none focus:border-blue-600 focus:shadow-outline-blue active:bg-blue-200 transition duration-150 ease-in-out">
                                         Modifier le projet
                                     </a>
                                 </div>
