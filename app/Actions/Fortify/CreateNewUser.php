@@ -22,7 +22,7 @@ class CreateNewUser implements CreatesNewUsers
     public function create(array $input): User
     {
         Validator::make($input, [
-            'username' => ['required', 'string', 'max:50', 'unique:users'],
+            'username' => ['required', 'string', 'max:50', 'unique:users', 'alpha_dash'],
             'email' => ['required', 'string', 'email', 'max:100', 'unique:users'],
             'firstname' => ['required', 'string', 'max:50'],
             'lastname' => ['required', 'string', 'max:50'],

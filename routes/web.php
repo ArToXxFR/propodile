@@ -63,6 +63,8 @@ Route::middleware([
 
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
             ->name('admin.dashboard');
+
+        Route::put('/admin/ban/{username}', [AdminController::class, 'ban']);
     });
 });
 
