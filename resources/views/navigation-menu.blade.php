@@ -48,7 +48,7 @@
                                         </x-dropdown-link>
 
                                         @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                                            <x-dropdown-link href="{{ route('project.create.get') }}">
+                                            <x-dropdown-link href="{{ route('project.create.form') }}">
                                                 {{ __('Créer un nouveau projet') }}
                                             </x-dropdown-link>
                                         @endcan
@@ -181,7 +181,7 @@
                         {{ __('Team Settings') }}
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link href="{{ route('project.create.get') }}" :active="request()->routeIs('project.create.get')">
+                    <x-responsive-nav-link href="{{ route('project.create.form') }}" :active="request()->routeIs('project.create.form')">
                         {{ __('Créer un nouveau projet') }}
                     </x-responsive-nav-link>
 

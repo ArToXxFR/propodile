@@ -28,7 +28,7 @@ Route::middleware([
 
     Route::get('/project/create', function() {
         return view('project.create');
-    })->name('project.create.get');
+    })->name('project.create.form');
 
     Route::post('/project/create', [ProjectController::class, 'create'])
     ->name('project.create.post');
