@@ -33,9 +33,9 @@
                 {{ __('Enregistré.') }}
             </x-action-message>
 
-            <x-button class="inline-flex items-center px-4 py-2 border bg-white border-black text-black rounded-md hover:bg-gray-500 hover:text-black focus:outline-none focus:border-green-600 focus:shadow-outline-green active:bg-green-600 transition duration-300 ease-in-out">
+            <button class="inline-flex items-center px-4 py-2 border bg-white border-black text-black rounded-md hover:bg-gray-500 hover:text-black focus:outline-none focus:border-green-600 focus:shadow-outline-green active:bg-green-600 transition duration-300 ease-in-out">
                 {{ __('Enregistrer') }}
-            </x-button>
+            </button>
         </x-slot>
     @endif
 </x-form-section>
