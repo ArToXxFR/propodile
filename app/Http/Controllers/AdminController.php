@@ -10,11 +10,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
+
 class AdminController extends Controller
 {
     public function listUsers() {
         try {
-            $users = User::paginate(10);
+            $users = User::all();
 
             return view('admin.users', [
                 'users' => $users
