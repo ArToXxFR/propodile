@@ -15,7 +15,8 @@ use Livewire\WithPagination;
 class AdminController extends Controller
 {
     use WithPagination;
-    public function listUsers() {
+    public function listUsers(): View|RedirectResponse
+    {
         try {
             $users = User::paginate(10);
 
@@ -28,7 +29,22 @@ class AdminController extends Controller
         }
     }
 
-    public function listProjects() {
+    public function listBannedUsers(): View|RedirectResponse
+    {
+        try {
+            $users = User::where('banned', 1)->paginate(10);
+
+            return view('admin.users-banned', [
+                'users' => $users,
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Erreur lors de la récupération des utilisateurs bannis :" . $e->getMessage());
+            return redirect()->back()->withErrors(['message' => "Erreur lors de la récupération des utilisateurs bannis."]);
+        }
+    }
+
+    public function listProjects(): View|RedirectResponse
+    {
         try {
             $projects = Project::paginate(10);
 

@@ -48,8 +48,10 @@
                         </div>
                         <!-- Bouton pour voir les utilisateurs bannis -->
                         <div class="mt-4">
-                            <x-button :link="route('admin.users.banned')" class="w-full">
-                                {{ __('Voir les utilisateurs bannis') }}
+                            <x-button class="w-full">
+                                <a href="{{ route('admin.users.banned') }}">
+                                    {{ __('Voir les utilisateurs bannis') }}
+                                </a>
                             </x-button>
                         </div>
                     </x-dashboard-section>
