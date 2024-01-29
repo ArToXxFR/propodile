@@ -1,3 +1,4 @@
+@section('title', 'Créer un compte')
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">

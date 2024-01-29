@@ -1,4 +1,5 @@
-<x-guest-layout>
+@section('title', 'Créer une équipe')
+<x-app-layout>
     <x-project-card>
         <x-slot name="logo">
             <x-authentication-card-logo />
@@ -53,7 +54,7 @@
             </div>
         </form>
     </x-project-card>
-</x-guest-layout>
+</x-app-layout>
 
 <script>
     document.getElementById('description').addEventListener('input', function () {
