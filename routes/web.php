@@ -6,6 +6,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TeamController;
 use App\Http\Middleware\CheckAdmin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckProjectLimit;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,12 +27,17 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
+    Route::middleware([CheckProjectLimit::class])->group(function (){
+        Route::post('/project/create', [ProjectController::class, 'create'])
+            ->name('project.create.post');
+
+        Route::get('/team/accept/{id}', [TeamController::class, 'acceptInvitation'])
+            ->name('team.accept');
+    });
+
     Route::get('/project/create', function() {
         return view('project.create');
     })->name('project.create.form');
-
-    Route::post('/project/create', [ProjectController::class, 'create'])
-    ->name('project.create.post');
 
     Route::delete('/project/delete/{id}', [ProjectController::class, 'delete'])
     ->name('project.delete');
@@ -45,8 +51,6 @@ Route::middleware([
     Route::post('/team/join', [TeamController::class, 'sendInvitation'])
     ->name('team.join');
 
-    Route::get('/team/accept/{id}', [TeamController::class, 'acceptInvitation'])
-    ->name('team.accept');
 
     Route::get('/dashboard', [TeamController::class, 'dashboard'])
         ->name('dashboard');
