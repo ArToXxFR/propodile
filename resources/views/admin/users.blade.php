@@ -1,5 +1,4 @@
-<!-- resources/views/livewire/user-list.blade.php -->
-
+@section('title', 'Utilisateurs - Admin')
 <div>
     <x-app-layout>
         <x-slot name="header">

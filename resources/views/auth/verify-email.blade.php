@@ -1,3 +1,4 @@
+@section('title', 'Vérification de mon mail')
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">

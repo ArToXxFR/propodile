@@ -1,3 +1,4 @@
+@section('title', 'Projet')
 <x-app-layout>
     <div class="antialiased bg-gray-100 h-screen text-gray-800">
         @if (Route::has('login'))
