@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Colors\Rgb\Channels\Red;
+use Illuminate\View\View;
 
 class TeamController extends Controller
 {
@@ -77,7 +79,7 @@ class TeamController extends Controller
         }
     }
 
-    public function dashboard()
+    public function dashboard(): View|RedirectResponse
     {
         try {
             $user = Auth::user();
