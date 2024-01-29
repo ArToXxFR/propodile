@@ -12,7 +12,6 @@ class BanUserModal extends Component
     public $userId;
     public $confirmingBanUser = false;
     public $users;
-
     public function mount($users)
     {
         $this->users = $users;
@@ -26,13 +25,14 @@ class BanUserModal extends Component
 
     public function openBanUserModal()
     {
-        return view('livewire.ban-user-modal');
+        $this->emit('openBanUserModal');
     }
+
 
     public function render()
     {
-        $users = User::paginate(10);
-
-        return view('livewire.ban-user-modal', compact('users'));
+        return view('livewire.ban-user-modal', [
+            'users' => $this->users
+        ]);
     }
 }
