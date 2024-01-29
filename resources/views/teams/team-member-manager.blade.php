@@ -68,9 +68,9 @@
                         {{ __('Ajouté.') }}
                     </x-action-message>
 
-                    <x-button class="inline-flex items-center px-4 py-2 border bg-white border-black text-black rounded-md hover:bg-gray-500 hover:text-black focus:outline-none focus:border-green-600 focus:shadow-outline-green active:bg-green-600 transition duration-300 ease-in-out">
-                        {{ __('Ajouter') }}
-                    </x-button>
+                    <button class="inline-flex items-center px-4 py-2 border bg-white border-black text-black rounded-md hover:bg-gray-500 hover:text-black focus:outline-none focus:border-green-600 focus:shadow-outline-green active:bg-green-600 transition duration-300 ease-in-out">
+                        Ajouter
+                    </button>
                 </x-slot>
             </x-form-section>
         </div>
@@ -198,9 +198,9 @@
                 {{ __('Annuler') }}
             </x-secondary-button>
 
-            <x-button class="ms-3" wire:click="updateRole" wire:loading.attr="disabled">
+            <button class="ms-3" wire:click="updateRole" wire:loading.attr="disabled">
                 {{ __('Enregistrer') }}
-            </x-button>
+            </button>
         </x-slot>
     </x-dialog-modal>
 
