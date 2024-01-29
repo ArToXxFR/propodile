@@ -63,6 +63,15 @@ Route::middleware([
 
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
             ->name('admin.dashboard');
+
+        Route::put('/admin/ban/{id}', [AdminController::class, 'ban'])
+            ->name("admin.user.ban");
+
+        Route::put('/admin/unban/{id}', [AdminController::class, 'unban'])
+            ->name("admin.user.unban");
+
+        Route::delete('/admin/delete/{id}', [AdminController::class, 'delete'])
+            ->name("admin.user.delete");
     });
 });
 

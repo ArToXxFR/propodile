@@ -3,14 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\Project;
-use App\Models\Team;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Team>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tag>
  */
-class TeamFactory extends Factory
+class TagFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,9 +18,8 @@ class TeamFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
+            'tag' => $this->faker->word,
             'project_id' => 1,
-            'personal_team' => true,
         ];
     }
 }
