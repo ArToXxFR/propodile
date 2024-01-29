@@ -117,14 +117,10 @@
                                                     Demande en attente
                                                 </div>
                                             @else
-                                                <form action="{{ route("team.join") }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir demander à rejoindre le projet ?')">
-                                                    @csrf
-                                                    <input type="hidden" value="{{ $project->id }}" name="id">
-                                                    <input type="hidden" value="{{ $project->team_id }}" name="team_id">
-                                                    <button type="submit" class="w-full justify-center inline-flex items-center px-4 py-2 border border-yellow-500 text-sm leading-5 font-medium rounded-md text-yellow-500 hover:bg-yellow-100 focus:outline-none focus:border-yellow-600 focus:shadow-outline-yellow active:bg-yellow-200 transition duration-150 ease-in-out">
-                                                        Demander à rejoindre le projet
-                                                    </button>
-                                                </form>
+                                                <button onclick="openJoinProjectModal()" class="w-full justify-center inline-flex items-center px-4 py-2 border border-yellow-500 text-sm leading-5 font-medium rounded-md text-yellow-500 hover:bg-yellow-100 focus:outline-none focus:border-yellow-600 focus:shadow-outline-yellow active:bg-yellow-200 transition duration-150 ease-in-out">
+                                                    Demander à rejoindre le projet
+                                                </button>
+                                                @include('project.join-project-popup')
                                             @endif
                                         @endunless
                                     @else
@@ -150,13 +146,10 @@
 
                             @can('delete-project', $team)
                                 <div class="w-full">
-                                    <form action="{{ route("project.delete", ['id' => $project->id]) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="w-full inline-flex items-center justify-center px-6 py-2 border border-red-500 text-sm leading-5 font-medium rounded-md text-red-500 hover:bg-red-100 focus:outline-none focus:border-red-600 focus:shadow-outline-red active:bg-red-200 transition duration-150 ease-in-out">
-                                            Supprimer le projet
-                                        </button>
-                                    </form>
+                                    <button onclick="openDeleteProjectModal()" class="w-full inline-flex items-center justify-center px-6 py-2 border border-red-500 text-sm leading-5 font-medium rounded-md text-red-500 hover:bg-red-100 focus:outline-none focus:border-red-600 focus:shadow-outline-red active:bg-red-200 transition duration-150 ease-in-out">
+                                        Supprimer le projet
+                                    </button>
+                                    @include('project.delete-popup')
                                 </div>
                             @endcan
                         </div>
@@ -166,3 +159,5 @@
         </div>
     </div>
 </x-app-layout>
+
+@include('scripts.project-scripts')
