@@ -2,12 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckAdmin
+class IsUserBanned
 {
     /**
      * Handle an incoming request.
@@ -16,12 +18,17 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role == 'guest') {
+        $user = User::where('username', ($request->input('username')))->first();
+        if ($user && $user->banned){
+            Auth::logout();
+            $request->session()->invalidate();
+
+            $request->session()->regenerateToken();
+
             return redirect()->back()->dangerBanner(
-                __('Vous n\'avez pas les permissions nécessaires.'),
+                __('Votre compte a été banni.'),
             );
         }
-
         return $next($request);
     }
 }

@@ -18,7 +18,9 @@ class CheckProjectLimit
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->allTeams()->count() >= 5) {
-            return redirect()->back()->with('error', 'Vous avez atteint la limite de projets.');
+            return redirect()->back()->dangerBanner(
+                __('Vous avez atteint la limite de projets.'),
+            );
         }
 
         return $next($request);
