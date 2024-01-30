@@ -42,10 +42,12 @@ class TeamController extends Controller
             return to_route('home')->with('status', 'La demande a bien été envoyée.');
         } catch (ModelNotFoundException $e) {
             Log::error("Utilisateur ou Equipe non trouvés : " . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => 'L\'invitation n\'a pas pu être envoyée.']);
+            return abort(404);
         } catch (\Exception $e) {
             Log::error("Erreur lors de l'envoi de l'invitation :" . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => 'Erreur lors de l\'envoi de l\'invitation .']);
+            return redirect()->back()->dangerBanner(
+                __('Une erreur s\'est produite lors de l\'envoi de l\'invitation.'),
+            );
         }
     }
 
@@ -75,7 +77,9 @@ class TeamController extends Controller
             return abort(404);
         } catch (\Exception $e) {
             Log::error("Erreur lors de l'acceptation de l'invitation :" . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => 'Erreur lors de l\'acceptation de l\'invitation .']);
+            return redirect()->back()->dangerBanner(
+                __('Une erreur s\'est produite lors de l\'acceptation de la l\'invitation du projet.'),
+            );
         }
     }
 
@@ -91,7 +95,9 @@ class TeamController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error("Erreur lors de la récupération des projets :" . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => "Erreur lors de la récupération des projets."]);
+            return redirect()->back()->dangerBanner(
+                __('Une erreur s\'est produite lors de la récupération des projets.'),
+            );
         }
     }
 }

@@ -11,7 +11,6 @@
 
         <form action="{{ route('project.create.post') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
             <div class="mt-6">
                 <x-label for="title" value="{{ __('Nom du projet') }}" class="text-lg" />
                 <x-input id="title" class="block w-full mt-2" type="text" name="title" required autofocus />

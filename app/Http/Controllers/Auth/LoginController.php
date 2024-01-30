@@ -41,10 +41,11 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        // Vérifier si l'utilisateur est banni
         if ($user->banned) {
             Auth::logout();
-            return redirect()->route('login')->withErrors(['banned' => 'Vous êtes banni.']);
+            return redirect()->back()->dangerBanner(
+                __('Votre compte a été banni.'),
+            );
         }
 
         return redirect()->intended($this->redirectPath());

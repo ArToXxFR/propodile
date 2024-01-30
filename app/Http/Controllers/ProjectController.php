@@ -91,7 +91,9 @@ class ProjectController extends Controller
             return to_route('project.show', ['id' => $project->id]);
         } catch (\Exception $e) {
             Log::error("Impossible de créer le projet ou l'équipe : " . $e->getMessage());
-            return redirect()->back()->withErrors("Impossible de créer le projet ou l'équipe.");
+            return redirect()->back()->dangerBanner(
+                __('Une erreur s\'est produite lors de la création du projet.'),
+            );
         }
 
     }
@@ -120,7 +122,9 @@ class ProjectController extends Controller
             return abort(404);
         } catch (\Exception $e) {
             Log::error("Impossible de supprimer le projet :" . $e->getMessage());
-            return redirect()->back()->withErrors("Impossible de supprimer le projet.");
+            return redirect()->back()->dangerBanner(
+                __('Une erreur s\'est produite lors de la suppression du projet.'),
+            );
         }
     }
 
@@ -155,8 +159,10 @@ class ProjectController extends Controller
             Log::error("Impossible de récupérer les informations du projet.");
             return abort(404);
         } catch (\Exception $e) {
-            Log::error("Une erreur s'est produite lors de la récupération de projet : " . $e->getMessage());
-            return redirect()->back()->withErrors("Une erreur s'est produite.");
+            Log::error("Une erreur s'est produite lors de la récupération du projet : " . $e->getMessage());
+            return redirect()->back()->dangerBanner(
+                __('Une erreur s\'est produite lors de la récupération du projet.'),
+            );
         }
     }
 
@@ -175,7 +181,9 @@ class ProjectController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error("Impossible de charger les projets : " . $e->getMessage());
-            return redirect()->back()->withErrors("Impossible de récupérer les projets.");
+            return redirect()->back()->dangerBanner(
+                __('Une erreur s\'est produite lors de la récupération des projets.'),
+            );
         }
     }
 
@@ -235,7 +243,9 @@ class ProjectController extends Controller
             return abort(404);
         } catch (\Exception $e) {
             Log::error('Impossible de modifier le projet : ' . $e->getMessage());
-            return redirect()->back()->withErrors("Impossible de mofier le projet.");
+            return redirect()->back()->dangerBanner(
+                __('Une erreur s\'est produite lors de la modification du projet.'),
+            );
         }
     }
 
@@ -268,8 +278,11 @@ class ProjectController extends Controller
         } catch (ModelNotFoundException $e) {
             Log::error('Le projet n\'a pas été trouvé : ' . $e->getMessage());
             return abort(404);
-        } catch (\Exception) {
-            return redirect()->back()->withErrors(['message' => "Une erreur est survenue lors de la récupération de données."]);
+        } catch (\Exception $e) {
+            Log::error('Le projet n\'a pas été trouvé : ' . $e->getMessage());
+            return redirect()->back()->dangerBanner(
+                __('Une erreur s\'est produite lors de la récupération du projet.'),
+            );
         }
     }
 }

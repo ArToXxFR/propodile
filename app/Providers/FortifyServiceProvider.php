@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -33,11 +34,12 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('username', $request->username)->first();
-
             if ($user && Hash::check($request->password, $user->password)) {
                if($user->banned){
                    Auth::logout();
-                   return null;
+                   return throw ValidationException::withMessages([
+                       'errors' => "Vous avez été banni. Veuillez contacter un Administrateur.",
+                   ]);
                }
                 return $user;
             }

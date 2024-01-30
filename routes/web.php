@@ -7,6 +7,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Middleware\CheckAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckProjectLimit;
+use App\Http\Middleware\IsUserBanned;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,4 +87,5 @@ Route::get('/project/show/{id}', [ProjectController::class, 'show'])
 
 Route::get('/{username}', [ProfileController::class, 'show'])
     ->name('user.show');
+
 
