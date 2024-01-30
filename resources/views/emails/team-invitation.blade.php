@@ -1,7 +1,9 @@
 @component('mail::message')
+    {{ __('Invitation dans une équipe - Propodile') }}
+
     {{ __('Vous avez été invité à rejoindre l\'équipe :team !', ['team' => $invitation->team->name]) }}
 
-    {{ __('Si vous n\'avez pas de compte, vous pouvez en créer un en cliquant sur le bouton ci-dessous. Après avoir créé un compte, vous pourrez cliquer sur le bouton d\'acceptation de l\'invitation dans cet email pour accepter l\'invitation dans l\'équipe :') }}
+    {{ __("Si vous n'avez pas de compte, vous pouvez en créer un en cliquant sur le bouton ci-dessous. Après avoir créé un compte, vous pourrez cliquer sur le bouton d'acceptation de l'invitation dans cet email pour accepter l'invitation dans l'équipe :") }}
 
     @component('mail::button', ['url' => route('register')])
         {{ __('Créer un compte') }}

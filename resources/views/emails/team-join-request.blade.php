@@ -1,27 +1,25 @@
 @component('mail::message')
-{{ __(':user a demandé à rejoindre votre projet !', ['user' => $user]) }}
+    # {{ __('Demande de rejoindre votre projet') }}
 
-@if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::registration()))
-{{ __('If you do not have an account, you may create one by clicking the button below. After creating an account, you may click the invitation acceptance button in this email to accept the team invitation:') }}
+    {{ __(':user a demandé à rejoindre votre projet !', ['user' => $user]) }}
 
-@component('mail::button', ['url' => route('register')])
-{{ __('Create Account') }}
-@endcomponent
+    @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::registration()))
+        {{ __('Si vous n\'avez pas de compte, vous pouvez en créer un en cliquant sur le bouton ci-dessous. Après avoir créé un compte, vous pourrez cliquer sur le bouton d\'acceptation de l\'invitation dans cet email pour accepter la demande :') }}
 
-{{ __('If you already have an account, you may accept this invitation by clicking the button below:') }}
+        @component('mail::button', ['url' => route('register')])
+            {{ __('Créer un compte') }}
+        @endcomponent
+    @endif
 
-@else
-{{ __('You may accept this invitation by clicking the button below:') }}
-@endif
+    {{ __('Si vous avez déjà un compte, vous pouvez accepter cette demande en cliquant sur le bouton ci-dessous :') }}
 
+    @component('mail::button', ['url' => $acceptUrl])
+        {{ __('Accepter la demande') }}
+    @endcomponent
 
-@component('mail::button', ['url' => $acceptUrl])
-{{ __('Accepter la demande') }}
-@endcomponent
+    @component('mail::button', ['url' => $profileUrl])
+        {{ __('Voir le profil') }}
+    @endcomponent
 
-@component('mail::button', ['url' => $acceptUrl])
-    {{ __('Voir le profil') }}
-@endcomponent
-
-{{ __('If you did not expect to receive an invitation to this team, you may discard this email.') }}
+    {{ __('Si vous n\'attendiez pas de recevoir une demande pour rejoindre ce projet, vous pouvez ignorer cet email.') }}
 @endcomponent
