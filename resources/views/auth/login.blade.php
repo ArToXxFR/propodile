@@ -1,4 +1,5 @@
 @section('title', 'Connexion')
+
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
@@ -43,6 +44,15 @@
                 <x-button class="ms-4">
                     {{ __('Se connecter') }}
                 </x-button>
+            </div>
+
+            <div class="flex items-center justify-end mt-4">
+                <span class="text-sm text-gray-600">
+                    {{ __("Vous n'avez pas de compte?") }}
+                </span>
+                <a class="underline text-sm text-gray-900 hover:text-gray-700 ms-1" href="{{ route('register') }}">
+                    {{ __('Créer un compte') }}
+                </a>
             </div>
         </form>
     </x-authentication-card>

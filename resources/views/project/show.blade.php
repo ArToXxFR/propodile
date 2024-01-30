@@ -1,21 +1,7 @@
 @section('title', 'Projet')
 <x-app-layout>
     <div class="antialiased bg-gray-100 h-screen text-gray-800">
-        @if (Route::has('login'))
-            <div class="fixed top-0 right-0 p-6 text-right z-10">
-                @auth
-                    <a href="{{ url('/dashboard') }}" class="font-semibold text-blue-600 hover:text-blue-800 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                @else
-                    <a href="{{ route('login') }}" class="font-semibold text-blue-600 hover:text-blue-800 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
-
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="ml-4 font-semibold text-blue-600 hover:text-blue-800 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
-                    @endif
-                @endauth
-            </div>
-        @endif
-
-        <div class="container mx-auto p-8">
+         <div class="container mx-auto p-8">
             <div class='text-center uppercase text-4xl text-blue-600 font-bold mb-4'>
                 {{ $project->title }}
             </div>
