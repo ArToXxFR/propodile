@@ -6,6 +6,7 @@ use App\Models\Tag;
 use App\Models\TeamJoinRequest;
 use App\Models\TeamUser;
 use Faker\Factory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
@@ -65,30 +66,18 @@ class ProjectController extends Controller
 
         try {
             $image = $this->isImage($request);
-            $project = Project::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'image' => (isset($image)) ? 'storage/projects/images/' . $image : "storage/projects/images/default.jpg",
-                'owner_id' => Auth::id(),
-                'status_id' => $request->status
+            DB::statement("CALL createProject(?, ?, ?, ?, ?, ?)", [
+                $request->title,
+                $request->description,
+                (isset($image)) ? 'storage/projects/images/' . $image : "storage/projects/images/default.jpg",
+                Auth::id(),
+                $request->status,
+                $request->tags,
             ]);
 
-            Team::create([
-                'name' => $request->title,
-                'personal_team' => 1,
-                'user_id' => Auth::id(),
-                'project_id' => $project->id,
-            ]);
+            $project_id = DB::select("SELECT id FROM projects ORDER BY id DESC LIMIT 1");
 
-            $tags = $request->input('tags');
-
-            $tags = explode(',', $tags);
-
-            foreach ($tags as $tag) {
-                Tag::create(['name' => $tag, 'project_id' => $project->id]);
-            }
-
-            return to_route('project.show', ['id' => $project->id]);
+            return to_route('project.show', ['id' => $project_id[0]->id]);
         } catch (\Exception $e) {
             Log::error("Impossible de créer le projet ou l'équipe : " . $e->getMessage());
             return redirect()->back()->dangerBanner(
@@ -112,9 +101,7 @@ class ProjectController extends Controller
                 abort(403);
             }
 
-            Project::destroy($projectId);
-            Team::where('project_id', $projectId)->delete();
-            Tag::where('project_id', $projectId)->delete();
+            DB::select('CALL deleteProject(?)', [$projectId]);
 
             return to_route('home');
         } catch (ModelNotFoundException $e) {
@@ -213,31 +200,16 @@ class ProjectController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            $tagsToDelete = array_diff($oldTags, $newTags);
-            $tagsToCreate = array_diff($newTags, $oldTags);
-
-            Tag::whereIn('name', $tagsToDelete)->delete();
-
-            foreach ($tagsToCreate as $tagName) {
-                if (!empty($tagName)) {
-                    Tag::create(['name' => $tagName, 'project_id' => $projectId]);
-                }
-            }
-
-            $project->update([
-                'title' => $request->title,
-                'description' => $request->description,
-                'image' => (isset($image)) ? 'storage/projects/images/' . $image : $project->image,
-                'status_id' => $request->status
+            DB::select('CALL updateProject(?, ?, ?, ?, ?, ?)', [
+                $projectId,
+                $request->title,
+                $request->description,
+                (isset($image)) ? 'storage/projects/images/' . $image : '',
+                $request->status,
+                $request->tags
             ]);
 
-            $team->update([
-                'name' => $request->title
-            ]);
-
-            $tagName = $request->input('tags_array');
-
-            return to_route('home');
+            return redirect()->route('project.show', ['id' => $project->id]);
         } catch (ModelNotFoundException $e) {
             Log::error("Impossible de trouver le projet à modifer :" . $e->getMessage());
             return abort(404);
