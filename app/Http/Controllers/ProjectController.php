@@ -6,6 +6,7 @@ use App\Models\Tag;
 use App\Models\TeamJoinRequest;
 use App\Models\TeamUser;
 use Faker\Factory;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -58,20 +59,20 @@ class ProjectController extends Controller
      */
     public function create(Request $request): RedirectResponse
     {
-        $validator = Validator::make($request->all(), Project::$rules, Project::$messages);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
         try {
+            $validator = Validator::make($request->all(), Project::$rules, Project::$messages);
+
+            if ($validator->fails()) {
+                return abort(Response::HTTP_FORBIDDEN);
+            }
+
             $image = $this->isImage($request);
             DB::statement("CALL createProject(?, ?, ?, ?, ?, ?)", [
                 $request->title,
                 $request->description,
                 (isset($image)) ? 'storage/projects/images/' . $image : "storage/projects/images/default.jpg",
                 Auth::id(),
-                $request->status,
+                $request->status_id,
                 $request->tags,
             ]);
 
@@ -84,7 +85,6 @@ class ProjectController extends Controller
                 __('Une erreur s\'est produite lors de la création du projet.'),
             );
         }
-
     }
 
     /**
@@ -93,20 +93,19 @@ class ProjectController extends Controller
      * @param int $projectId
      * @return RedirectResponse
      */
-    public function delete(int $projectId): RedirectResponse
+    public function delete(int $projectId): RedirectResponse|Response
     {
         try {
             $team = Team::where('project_id', $projectId)->firstorFail();
             if (Gate::denies('delete-project', $team)) {
                 abort(403);
             }
-
             DB::select('CALL deleteProject(?)', [$projectId]);
 
             return to_route('home');
         } catch (ModelNotFoundException $e) {
             Log::error("Le projet à supprimer n'a pas été trouvé : " . $e->getMessage());
-            return abort(404);
+            return response()->view('errors.404', [], Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
             Log::error("Impossible de supprimer le projet :" . $e->getMessage());
             return redirect()->back()->dangerBanner(
@@ -122,7 +121,7 @@ class ProjectController extends Controller
      * @param int $id
      * @return View|RedirectResponse
      */
-    public function show(int $id): View|RedirectResponse
+    public function show(int $id): View|RedirectResponse|Response
     {
         try {
             $project = Project::find($id);
@@ -144,7 +143,7 @@ class ProjectController extends Controller
             ]);
         } catch (ModelNotFoundException $e) {
             Log::error("Impossible de récupérer les informations du projet.");
-            return abort(404);
+            return response()->view('errors.404', [], Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
             Log::error("Une erreur s'est produite lors de la récupération du projet : " . $e->getMessage());
             return redirect()->back()->dangerBanner(
@@ -160,18 +159,11 @@ class ProjectController extends Controller
      */
     public function index(): View|RedirectResponse
     {
-        try {
-            $projects = Project::all();
+        $projects = Project::all();
 
-            return view('welcome', [
-                'projects' => $projects
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Impossible de charger les projets : " . $e->getMessage());
-            return redirect()->back()->dangerBanner(
-                __('Une erreur s\'est produite lors de la récupération des projets.'),
-            );
-        }
+        return view('welcome', [
+            'projects' => $projects
+        ]);
     }
 
     /**
@@ -181,7 +173,7 @@ class ProjectController extends Controller
      * @param int $projectId
      * @return RedirectResponse
      */
-    public function update(Request $request, int $projectId): RedirectResponse
+    public function update(Request $request, int $projectId): RedirectResponse|Response
     {
         try {
             $team = Team::where('project_id', $projectId)->firstorFail();
@@ -205,14 +197,14 @@ class ProjectController extends Controller
                 $request->title,
                 $request->description,
                 (isset($image)) ? 'storage/projects/images/' . $image : '',
-                $request->status,
+                $request->status_id,
                 $request->tags
             ]);
 
             return redirect()->route('project.show', ['id' => $project->id]);
         } catch (ModelNotFoundException $e) {
             Log::error("Impossible de trouver le projet à modifer :" . $e->getMessage());
-            return abort(404);
+            return response()->view('errors.404', [], Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
             Log::error('Impossible de modifier le projet : ' . $e->getMessage());
             return redirect()->back()->dangerBanner(
@@ -227,7 +219,7 @@ class ProjectController extends Controller
      * @param int $projectId
      * @return View|RedirectResponse
      */
-    public function updateForm(int $projectId): View|RedirectResponse
+    public function updateForm(int $projectId): View|RedirectResponse|Response
     {
         try {
 
@@ -249,7 +241,7 @@ class ProjectController extends Controller
             ]);
         } catch (ModelNotFoundException $e) {
             Log::error('Le projet n\'a pas été trouvé : ' . $e->getMessage());
-            return abort(404);
+            return response()->view('errors.404', [], Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
             Log::error('Le projet n\'a pas été trouvé : ' . $e->getMessage());
             return redirect()->back()->dangerBanner(

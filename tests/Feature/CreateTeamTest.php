@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Project;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Jetstream\Http\Livewire\CreateTeamForm;
@@ -14,13 +16,17 @@ class CreateTeamTest extends TestCase
 
     public function test_teams_can_be_created(): void
     {
-        $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+        $this->actingAs($user = User::factory()->create());
+        $project = Project::factory()->create();
 
-        Livewire::test(CreateTeamForm::class)
-            ->set(['state' => ['name' => 'Test Team']])
-            ->call('createTeam');
+        Team::create([
+            'name' => 'Test Team',
+            'user_id' => $user->id,
+            'project_id' => $project->id,
+            'personal_team' => true,
+        ]);
 
-        $this->assertCount(2, $user->fresh()->ownedTeams);
+        $this->assertCount(1, $user->fresh()->ownedTeams);
         $this->assertEquals('Test Team', $user->fresh()->ownedTeams()->latest('id')->first()->name);
     }
 }

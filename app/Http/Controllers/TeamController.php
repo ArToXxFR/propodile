@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -21,7 +22,7 @@ use Illuminate\View\View;
 
 class TeamController extends Controller
 {
-    public function sendInvitation(Request $request): RedirectResponse
+    public function sendInvitation(Request $request): RedirectResponse|Response
     {
         try {
             $user = User::findOrFail(Auth::id());
@@ -32,17 +33,13 @@ class TeamController extends Controller
                 'user_id' => $user->id,
                 'team_id' => $team->id,
             ]);
-            try {
-                Mail::to($owner->email)->send(new MailJoinRequest($user->username, $team->id));
-            } catch (\Exception $e) {
-                Log::error("Impossible d'envoyer le mail : " . $e->getMessage());
-                return redirect()->back()->withErrors(['message' => "Le mail n'a pas pu être envoyé."]);
-            }
+
+            Mail::to($owner->email)->send(new MailJoinRequest($user->username, $team->id));
 
             return to_route('home')->with('status', 'La demande a bien été envoyée.');
         } catch (ModelNotFoundException $e) {
             Log::error("Utilisateur ou Equipe non trouvés : " . $e->getMessage());
-            return abort(404);
+            return response()->view('errors.404', [], Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
             Log::error("Erreur lors de l'envoi de l'invitation :" . $e->getMessage());
             return redirect()->back()->dangerBanner(
@@ -51,7 +48,7 @@ class TeamController extends Controller
         }
     }
 
-    public function acceptInvitation(int $team_id): RedirectResponse
+    public function acceptInvitation(int $team_id): RedirectResponse|Response
     {
         try {
             $request = TeamJoinRequest::where('team_id', $team_id)->firstOrFail();
@@ -74,7 +71,7 @@ class TeamController extends Controller
             );
         } catch (ModelNotFoundException $e) {
             Log::error("Invitation non trouvée : " . $e->getMessage());
-            return abort(404);
+            return response()->view('errors.404', [], Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
             Log::error("Erreur lors de l'acceptation de l'invitation :" . $e->getMessage());
             return redirect()->back()->dangerBanner(
@@ -85,19 +82,12 @@ class TeamController extends Controller
 
     public function dashboard(): View|RedirectResponse
     {
-        try {
-            $user = Auth::user();
-            $teams = $user->allTeams();
+        $user = Auth::user();
+        $teams = $user->allTeams();
 
-            return view('dashboard', [
-                'teams' => $teams,
-                'user' => $user
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Erreur lors de la récupération des projets :" . $e->getMessage());
-            return redirect()->back()->dangerBanner(
-                __('Une erreur s\'est produite lors de la récupération des projets.'),
-            );
-        }
+        return view('dashboard', [
+            'teams' => $teams,
+            'user' => $user
+        ]);
     }
 }

@@ -25,8 +25,8 @@
             </div>
 
             <div class="mt-6">
-                <x-label for="status" value="{{ __('Status') }}" class="text-lg" />
-                <x-select name="status" class="block w-full">
+                <x-label for="status_id" value="{{ __('Status') }}" class="text-lg" />
+                <x-select name="status_id" class="block w-full">
                     @foreach (\App\Models\Status::all() as $status)
                         <option value="{{ $status->id }}">{{ $status->name }}</option>
                     @endforeach

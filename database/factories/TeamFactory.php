@@ -23,6 +23,7 @@ class TeamFactory extends Factory
             'name' => $this->faker->word(),
             'project_id' => 1,
             'personal_team' => true,
+            'user_id' => User::factory()->create()->id
         ];
     }
 }

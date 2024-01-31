@@ -27,8 +27,8 @@
 
 
             <div class="mt-6">
-                <x-label for="status" value="{{ __('Status') }}" class="text-lg" />
-                <x-select name="status" class="block w-full">
+                <x-label for="status_id" value="{{ __('Status') }}" class="text-lg" />
+                <x-select name="status_id" class="block w-full">
                     @foreach ($statuses as $status)
                         <option value="{{ $status->id }}" {{ $project->status_id == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
                     @endforeach
