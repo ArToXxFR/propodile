@@ -17,7 +17,7 @@ class Project extends Model
     public static $rules = [
         'title' => 'required|string|max:100',
         'description' => 'required|string|max:1080',
-        'status' => 'required|exists:statuses,id',
+        'status_id' => 'required|integer|exists:statuses,id',
     ];
 
     public static $messages = [

@@ -12,6 +12,6 @@ class Grade extends Model
     public $timestamps = false;
 
     public function users() {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class);
     }
 }

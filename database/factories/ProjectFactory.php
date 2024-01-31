@@ -18,12 +18,13 @@ class ProjectFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
     public function definition(): array
     {
         return [
             'title' => $this->faker->word(),
             'description' => $this->faker->text(),
-            'owner_id' => 1,
+            'owner_id' => User::factory()->create()->id,
             'status_id' => 1,
         ];
     }
@@ -31,8 +32,8 @@ class ProjectFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Project $project) {
-            Tag::factory(rand(1,5))->create(['project_id' => $project->id]);
-            Team::factory()->create(['project_id' => $project->id, 'title' => $project->title]);
+            Tag::factory()->create(['project_id' => $project->id]);
+            Team::factory()->create(['project_id' => $project->id, 'name' => $project->title, 'user_id' => $project->owner_id]);
         });
     }
 }

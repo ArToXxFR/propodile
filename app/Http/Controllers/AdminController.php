@@ -17,107 +17,72 @@ class AdminController extends Controller
     use WithPagination;
     public function listUsers(): View|RedirectResponse
     {
-        try {
-            $users = User::paginate(10);
+        $users = User::paginate(10);
 
-            return view('admin.users', [
-                'users' =>$users,
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Erreur lors de la récupération des utilisateurs :" . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => "Erreur lors de la récupération des utilisateurs."]);
-        }
+        return view('admin.users', [
+            'users' =>$users,
+        ]);
     }
 
     public function listBannedUsers(): View|RedirectResponse
     {
-        try {
-            $users = User::where('banned', 1)->paginate(10);
+        $users = User::where('banned', 1)->paginate(10);
 
-            return view('admin.users-banned', [
-                'users' => $users,
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Erreur lors de la récupération des utilisateurs bannis :" . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => "Erreur lors de la récupération des utilisateurs bannis."]);
-        }
+        return view('admin.users-banned', [
+            'users' => $users,
+        ]);
     }
 
     public function listProjects(): View|RedirectResponse
     {
-        try {
-            $projects = Project::paginate(10);
+        $projects = Project::paginate(10);
 
-            return view('admin.projects', [
-                'projects' => $projects,
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Erreur lors de la récupération des projets :" . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => "Erreur lors de la récupération des projets."]);
-        }
+        return view('admin.projects', [
+            'projects' => $projects,
+        ]);
     }
 
     public function dashboard(): View|RedirectResponse
     {
-        try {
-            $projects = Project::paginate(5);
-            $users = User::paginate(5);
+        $projects = Project::paginate(5);
+        $users = User::paginate(5);
 
-            return view('admin.dashboard', [
-                'projects' => $projects,
-                'users' => $users,
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Erreur lors de la récupération du dashboard :" . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => "Erreur lors de la récupération du dashboard."]);
-        }
+        return view('admin.dashboard', [
+            'projects' => $projects,
+            'users' => $users,
+        ]);
     }
 
-    public function ban(Request $request, int $userId): RedirectResponse
+    public function ban(int $userId): RedirectResponse
     {
-        try {
-            $user = User::find($userId);
+        $user = User::find($userId);
 
-            $user->update([
-                'banned' => true,
-                'banned_until' => $request->date
-            ]);
+        $user->update([
+            'banned' => true,
+            'banned_until' => now()->toDateString()
+        ]);
 
-            return redirect()->back()->with(['message' => 'L\'utilisateur a bien été banni.']);
-        } catch (\Exception $e) {
-            Log::error("Impossible de bannir l'utilisateur :" . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => "Impossible de bannir l'utilisateur."]);
-        }
+        return redirect()->back()->with(['message' => 'L\'utilisateur a bien été banni.']);
     }
 
     public function unban(int $userId): RedirectResponse
     {
-        try {
-            $user = User::find($userId);
+        $user = User::find($userId);
 
-            $user->update([
-                'banned' => false,
-                'banned_until' => null
-            ]);
+        $user->update([
+            'banned' => false,
+            'banned_until' => null
+        ]);
 
-            return redirect()->back()->with(['message' => 'L\'utilisateur a bien été débanni.']);
-        } catch (\Exception $e) {
-            Log::error("Impossible de débannir l'utilisateur :" . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => "Impossible de débannir l'utilisateur."]);
-        }
+        return redirect()->back()->with(['message' => 'L\'utilisateur a bien été débanni.']);
     }
 
     public function delete(int $userId): RedirectResponse
     {
-        try {
-            $user = User::find($userId);
+        $user = User::find($userId);
 
-            $user->delete();
+        $user->delete();
 
-            return redirect()->back()->with(['message' => 'L\'utilisateur a bien été supprimé.']);
-        } catch (\Exception $e) {
-            Log::error("Impossible de supprimer l'utilisateur :" . $e->getMessage());
-            return redirect()->back()->withErrors(['message' => "Impossible de supprimer l'utilisateur."]);
-        }
+        return redirect()->back()->with(['message' => 'L\'utilisateur a bien été supprimé.']);
     }
 }
