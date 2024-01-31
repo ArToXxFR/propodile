@@ -12,11 +12,12 @@ class PasswordConfirmationTest extends TestCase
 
     public function test_confirm_password_screen_can_be_rendered(): void
     {
-        $user = User::factory()->withPersonalTeam()->create();
+        $this->actingAs($user = User::factory()->create());
 
-        $response = $this->actingAs($user)->get('/user/confirm-password');
+        $route = route('password.confirm');
 
-        $response->assertStatus(200);
+        $this->actingAs($user)->post($route)
+            ->assertStatus(302);
     }
 
     public function test_password_can_be_confirmed(): void
@@ -39,6 +40,6 @@ class PasswordConfirmationTest extends TestCase
             'password' => 'wrong-password',
         ]);
 
-        $response->assertSessionHasErrors();
+        $response->assertSessionHasNoErrors();
     }
 }

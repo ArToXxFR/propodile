@@ -46,7 +46,8 @@ class MailJoinRequest extends Mailable
             markdown: 'emails.team-join-request',
             with: [
                 'user' => $this->user,
-                'acceptUrl' => URL::signedRoute('team.accept', ['id' => $this->team_id])
+                'acceptUrl' => URL::signedRoute('team.accept', ['id' => $this->team_id]),
+                'profileUrl' => URL::signedRoute('user.show', ['username' => $this->user])
             ]
         );
     }

@@ -9,7 +9,7 @@
 
     <x-slot name="form">
         <div class="col-span-6">
-            <x-label value="{{ __('Team Owner') }}" />
+            <x-label value="{{ __('Propriétaire de l\'équipe') }}" />
 
             <div class="flex items-center mt-2">
                 <img class="w-12 h-12 rounded-full object-cover" src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}">

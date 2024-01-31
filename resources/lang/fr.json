@@ -1,0 +1,6 @@
+{
+    "pagination.previous": "Précédent",
+    "pagination.next": "Suivant",
+    "auth.failed": "Les informations de connexions sont incorrectes",
+    "auth.throttle": "Trop de tentatives de connexion. Veuillez réessayer ultérieurement."
+}
