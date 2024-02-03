@@ -20,7 +20,7 @@
                                 Membres: {{ $project->team->allUsers()->count() }}
                             </p>
                         </div>
-                        <a href="{{ route('project.show', ['id' => $project->id]) }}" class="inline-block px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-700">
+                        <a href="{{ route('project.show', ['id' => $project->id]) }}" class="inline-flex items-center px-4 py-2 border bg-white border-blue-500 text-blue-500 rounded-md hover:bg-blue-100 hover:text-blue-500 focus:shadow-outline-green transition duration-300 ease-in-out">
                             Voir le projet
                         </a>
                     </div>
