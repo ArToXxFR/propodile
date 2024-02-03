@@ -1,6 +1,6 @@
-<footer class="bg-gray-950 text-white p-4">
-    <div class="container mx-auto flex justify-between items-center">
-        <div>
+<footer class="block bg-gray-950 text-white p-4 mt-auto flex-shrink-0">
+    <div class="container mx-auto flex flex-col lg:flex-row justify-between items-center">
+        <div class="mb-4 lg:mb-0">
             <p class="text-xl font-semibold">Propodile</p>
         </div>
 

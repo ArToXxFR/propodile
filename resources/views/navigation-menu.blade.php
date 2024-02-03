@@ -2,7 +2,7 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
+            <div class="flex items-center">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
@@ -10,58 +10,137 @@
                     </a>
                 </div>
 
+                @guest
+                    <div class="flex tems-center ml-auto space-x-2">
+                        <x-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')" class="sm:hidden">
+                            <button class="bg-white hover:bg-blue-300 text-blue-500 border-blue-500 border font-bold py-2 px-3 rounded text-sm">
+                                {{ __('Se connecter') }}
+                            </button>
+                        </x-nav-link>
+
+                        <x-nav-link href="{{ route('register') }}" :active="request()->routeIs('register')" class="sm:hidden">
+                            <button class="bg-white hover:bg-blue-300 text-green-500 border-green-500 border font-bold py-2 px-3 rounded text-sm">
+                                {{ __('Créer un compte') }}
+                            </button>
+                        </x-nav-link>
+                    </div>
+                @endguest
+
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                <div class="hidden space-x-2 sm:-my-px sm:ms-4 sm:flex">
+                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                        {{ __('Page d\'accueil') }}
                     </x-nav-link>
                 </div>
+
+                @auth
+                    <div class="hidden space-x-2 sm:-my-px sm:ms-4 sm:flex">
+                        <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                            {{ __('Tableau de bord') }}
+                        </x-nav-link>
+                    </div>
+                @endauth
             </div>
+
+
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <!-- Teams Dropdown -->
                 @auth
-                    @if (Laravel\Jetstream\Jetstream::hasTeamFeatures() && Auth::user()->ownedTeams->count() > 0)
-                        <div class="ms-3 relative">
+                    <div class="ms-3 relative">
+                        @if(Auth::user()->isAdmin())
                             <x-dropdown align="right" width="60">
                                 <x-slot name="trigger">
-                                    <span class="inline-flex rounded-md">
-                                        <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                            Mes projets
-                                            <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-                                            </svg>
-                                        </button>
-                                    </span>
+                                <span class="inline-flex rounded-md">
+                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        Administration
+                                        <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                        </svg>
+                                    </button>
+                                </span>
                                 </x-slot>
-
-                                <x-slot name="content">
-                                    <div class="w-60">
-                                        <!-- Team Management -->
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
-                                            {{ __('Gérer mes projets') }}
-                                        </div>
-
-                                        <!-- Team Settings -->
-                                        <x-dropdown-link href="{{ route('dashboard') }}">
-                                            {{ __('Mes projets') }}
-                                        </x-dropdown-link>
-
-                                        @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                                            <x-dropdown-link href="{{ route('project.create.form') }}">
-                                                {{ __('Créer un nouveau projet') }}
-                                            </x-dropdown-link>
-                                        @endcan
-
+                            <x-slot name="content">
+                                <div class="w-60">
+                                    <!-- Team Management -->
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        {{ __('Administration') }}
                                     </div>
-                                </x-slot>
-                            </x-dropdown>
-                        </div>
-                    @endif
 
-                <!-- Settings Dropdown -->
+                                    <!-- Team Settings -->
+                                    <x-dropdown-link href="{{ route('admin.dashboard') }}">
+                                        {{ __('Tableau de bord') }}
+                                    </x-dropdown-link>
+
+                                    <x-dropdown-link href="{{ route('admin.projects') }}">
+                                        {{ __('Liste des projets') }}
+                                    </x-dropdown-link>
+
+                                    <x-dropdown-link href="{{ route('admin.users') }}">
+                                        {{ __('Liste des utilisateurs') }}
+                                    </x-dropdown-link>
+                                </div>
+                            </x-slot>
+
+                            </x-dropdown>
+                        @endif
+                    </div>
+
+                    <div class="ms-3 relative">
+                        <x-dropdown align="right" width="60">
+                            <x-slot name="trigger">
+                            <span class="inline-flex rounded-md">
+                                <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                    Mes projets
+                                    <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                    </svg>
+                                </button>
+                            </span>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                <div class="w-60">
+                                    <!-- Team Management -->
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        {{ __('Gérer mes projets') }}
+                                    </div>
+
+                                    <!-- Team Settings -->
+                                    <x-dropdown-link href="{{ route('dashboard') }}">
+                                        {{ __('Mes projets') }}
+                                    </x-dropdown-link>
+
+                                    @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
+                                        <x-dropdown-link href="{{ route('project.create.form') }}">
+                                            {{ __('Créer un nouveau projet') }}
+                                        </x-dropdown-link>
+                                    @endcan
+
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        {{ __('Liste de mes projets') }}
+                                    </div>
+                                    @if(Auth::user()->projects->count() > 0)
+                                        @foreach(Auth::user()->projects as $project)
+                                            <x-dropdown-link href="{{ route('project.show', ['id' => $project->id]) }}">
+                                                {{ __($project->title) }}
+                                            </x-dropdown-link>
+                                        @endforeach
+                                    @else
+                                        <div class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700">
+                                            {{ __('Vous n\'avez pas encore de projets') }}
+                                        </div>
+                                    @endif
+                                </div>
+                            </x-slot>
+
+                        </x-dropdown>
+                    </div>
+
+                    <!-- Settings Dropdown -->
                 <div class="ms-3 relative">
                     <x-dropdown align="right" width="48">
+
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                                 <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
@@ -83,20 +162,12 @@
                         <x-slot name="content">
                             <!-- Account Management -->
                             <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Manage Account') }}
+                                {{ __('Gérer mon compte') }}
                             </div>
 
                             <x-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
+                                {{ __('Mon profil') }}
                             </x-dropdown-link>
-
-                            @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                <x-dropdown-link href="{{ route('api-tokens.index') }}">
-                                    {{ __('API Tokens') }}
-                                </x-dropdown-link>
-                            @endif
-
-                            <div class="border-t border-gray-200"></div>
 
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}" x-data>
@@ -104,10 +175,11 @@
 
                                 <x-dropdown-link href="{{ route('logout') }}"
                                          @click.prevent="$root.submit();">
-                                    {{ __('Log Out') }}
+                                    {{ __('Se déconnecter') }}
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
+
                     </x-dropdown>
                 </div>
             </div>
@@ -126,8 +198,14 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                {{ __('Page d\'accueil') }}
+            </x-responsive-nav-link>
+        </div>
+
+        <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('Tableau de bord') }}
             </x-responsive-nav-link>
         </div>
 
@@ -136,36 +214,30 @@
             <div class="flex items-center px-4">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                     <div class="shrink-0 me-3">
-                        <img class="h-10 w-10 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                        <img class="h-10 w-10 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->username }}" />
                     </div>
                 @endif
 
                 <div>
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->username }}</div>
                     <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
                 </div>
             </div>
 
             <div class="mt-3 space-y-1">
                 <!-- Account Management -->
-                <x-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                    <x-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
-                        {{ __('API Tokens') }}
-                    </x-responsive-nav-link>
-                @endif
+                <x-dropdown-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
+                    {{ __('Mon profil') }}
+                </x-dropdown-link>
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
 
-                    <x-responsive-nav-link href="{{ route('logout') }}"
+                    <x-dropdown-link href="{{ route('logout') }}"
                                    @click.prevent="$root.submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
+                        {{ __('Se déconnecter') }}
+                    </x-dropdown-link>
                 </form>
 
                 <!-- Team Management -->
@@ -173,24 +245,66 @@
                     <div class="border-t border-gray-200"></div>
 
                     <div class="block px-4 py-2 text-xs text-gray-400">
-                        {{ __('Manage Team') }}
+                        {{ __('Gérer mes projets') }}
                     </div>
 
-                    <x-responsive-nav-link href="{{ route('project.create.form') }}" :active="request()->routeIs('project.create.form')">
+                    <x-dropdown-link href="{{ route('dashboard') }}">
+                        {{ __('Mes projets') }}
+                    </x-dropdown-link>
+
+                    <x-dropdown-link href="{{ route('project.create.form') }}" :active="request()->routeIs('project.create.form')">
                         {{ __('Créer un nouveau projet') }}
-                    </x-responsive-nav-link>
+                    </x-dropdown-link>
 
-                    <!-- Team Switcher -->
-                    @if (Auth::user()->allTeams()->count() > 0)
-                        <div class="border-t border-gray-200"></div>
+                    <div class="block px-4 py-2 text-xs text-gray-400">
+                        {{ __('Liste de mes projets') }}
+                    </div>
 
-                        <div class="block px-4 py-2 text-xs text-gray-400">
-                            {{ __('Switch Teams') }}
+                    @if(Auth::user()->projects->count() > 0)
+                        @foreach(Auth::user()->projects as $project)
+                            <x-dropdown-link href="{{ route('project.show', ['id' => $project->id]) }}">
+                                {{ __($project->title) }}
+                            </x-dropdown-link>
+                        @endforeach
+                    @else
+                        <div class="block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700">
+                            {{ __('Vous n\'avez pas encore de projets') }}
                         </div>
-
                     @endif
+
+                    @if(Auth::user()->isAdmin())
+                        <div class="w-60">
+                            <!-- Team Management -->
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Administration') }}
+                            </div>
+
+                            <!-- Team Settings -->
+                            <x-dropdown-link href="{{ route('admin.dashboard') }}">
+                                {{ __('Tableau de bord') }}
+                            </x-dropdown-link>
+
+                            <x-dropdown-link href="{{ route('admin.projects') }}">
+                                {{ __('Liste des projets') }}
+                            </x-dropdown-link>
+
+                            <x-dropdown-link href="{{ route('admin.users') }}">
+                                {{ __('Liste des utilisateurs') }}
+                            </x-dropdown-link>
+                        </div>
+                    @endif
+
                 @endif
                 @endauth
+                @guest
+                    <x-responsive-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:text-gray-700 focus:bg-gray-100 transition duration-150 ease-in-out">
+                        {{ __('Se connecter') }}
+                    </x-responsive-nav-link>
+
+                    <x-nav-link href="{{ route('register') }}" :active="request()->routeIs('register')" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:text-gray-700 focus:bg-gray-100 transition duration-150 ease-in-out">
+                        {{ __('Créer un compte') }}
+                    </x-nav-link>
+                @endguest
             </div>
         </div>
     </div>
