@@ -13,7 +13,7 @@ class GradeSeeder extends Seeder
      */
     public function run(): void
     {
-        $grade_list = [
+        $gradeList = [
             ['name' => 'Socle numérique 1'],
             ['name' => 'Socle numérique 2'],
             ['name' => 'Bachelor'],
@@ -21,6 +21,9 @@ class GradeSeeder extends Seeder
             ['name' => 'Ingénierie 2'],
             ['name' => 'Autre...'],
         ];
-        Grade::insert($grade_list);
+
+        foreach ($gradeList as $gradeData) {
+            Grade::firstOrCreate($gradeData);
+        }
     }
 }

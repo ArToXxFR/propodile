@@ -13,11 +13,13 @@ class StatusSeeder extends Seeder
      */
     public function run(): void
     {
-        $status_list = [
+        $statusList = [
             ['name' => 'Ouvert'],
             ['name' => 'Fermé'],
             ['name' => 'Recrute'],
         ];
-        Status::insert($status_list);
+        foreach ($statusList as $status) {
+            Status::firstOrCreate($status);
+        }
     }
 }
