@@ -1,15 +1,15 @@
 @section('title', 'Projet')
 <x-app-layout>
-    <div class="antialiased bg-gray-100 h-screen text-gray-800">
-         <div class="container mx-auto p-8">
+    <div class="antialiased bg-gray-100 min-h-screen text-gray-800">
+        <div class="container mx-auto p-8">
             <div class='text-center uppercase text-4xl text-blue-600 font-bold mb-4'>
                 {{ $project->title }}
             </div>
 
-            <div class="flex flex-wrap h-5/6 justify-around">
+            <div class="flex flex-wrap justify-around">
                 <!-- Left column for the card with the description -->
                 <div class="w-full md:w-8/12 mb-4 md:mb-0">
-                    <div class="bg-white rounded-lg p-4 shadow-md h-full">
+                    <div class="bg-white rounded-lg p-4 shadow-md">
                         <div class='text-blue-700 font-bold text-xl mb-2'>
                             Description
                         </div>
@@ -25,15 +25,14 @@
                             </div>
                             @forelse ($project->tags as $tag)
                                 <span class="inline-block bg-blue-500 text-white px-2 py-1 rounded-full mr-2 mb-2">
-                                {{ $tag->name }}
-                            </span>
+                                    {{ $tag->name }}
+                                </span>
                             @empty
                                 <p class="text-gray-500">Aucune technologie associée.</p>
                             @endforelse
                         </div>
                     </div>
                 </div>
-
 
                 <!-- Right column for the other information -->
                 <div class="w-full h-full md:w-3/12">
@@ -43,14 +42,13 @@
                                 <img src="{{ asset("storage/projects/images/" . basename($project->image)) }}" alt="" class="w-full h-auto rounded-lg">
                             </div>
                         </div>
+
                         <!-- Chef du projet -->
                         <div class="mt-4 text-center">
                             <span class="text-blue-700 font-bold text-xl mb-2">Propriétaire</span>
                             <div class="text-blue-800 font-extrabold">
-                                <a>
-                                    <a href="{{ route('user.show', ['username' => $owner->username]) }}">
-                                        {{ $owner->username }}
-                                    </a>
+                                <a href="{{ route('user.show', ['username' => $owner->username]) }}">
+                                    {{ $owner->username }}
                                 </a>
                             </div>
                         </div>

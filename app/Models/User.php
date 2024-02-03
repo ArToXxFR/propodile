@@ -73,4 +73,8 @@ class User extends Authenticatable
     public function grade() {
         return $this->belongsTo(Grade::class);
     }
+
+    public function isAdmin() {
+        return $this->role === 'admin' || $this->role === 'moderator';
+    }
 }
