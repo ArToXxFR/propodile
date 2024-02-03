@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+    propodile:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - ${PWD}/public:/var/www/html/public
+            - ${PWD}/storage:/var/www/html/storage
+            - apache2-logs:/var/log/apache2
+        ports:
+            - "8080:80"
+            - "4043:443"
+        container_name: propodile-app
+        environment:
+            - APP_ENV=production
+        depends_on:
+            mariadb:
+                condition: service_healthy
+        networks:
+            - propodile-network
+        command: bash /var/www/html/docker/prod/installation.sh
+
+    mariadb:
+        image: mariadb:11.0.4
+        ports:
+            - '${DB_PORT:-3306}:${DB_PORT:-3306}'
+        volumes:
+            - mariadb:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_TCP_PORT: '${DB_PORT}'
+        container_name: propodile-database
+        healthcheck:
+            test: ["CMD", "/usr/local/bin/healthcheck.sh", "--connect", "--innodb_initialized"]
+            interval: 5s
+            retries: 3
+            timeout: 3s
+        networks:
+            - propodile-network
+
+networks:
+    propodile-network:
+
+volumes:
+    mariadb:
+    apache2-logs:

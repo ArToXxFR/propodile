@@ -301,9 +301,9 @@
                         {{ __('Se connecter') }}
                     </x-responsive-nav-link>
 
-                    <x-nav-link href="{{ route('register') }}" :active="request()->routeIs('register')" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:text-gray-700 focus:bg-gray-100 transition duration-150 ease-in-out">
+                    <x-responsive-nav-link href="{{ route('register') }}" :active="request()->routeIs('register')" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:text-gray-700 focus:bg-gray-100 transition duration-150 ease-in-out">
                         {{ __('Créer un compte') }}
-                    </x-nav-link>
+                    </x-responsive-nav-link>
                 @endguest
             </div>
         </div>
