@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     npm \
     zip \
     awstats \
-    cron
+    cron 
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -24,6 +24,9 @@ RUN a2enmod ssl
 RUN a2enmod cgi
 
 # Install necessary PHP extensions
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
+install-php-extensions gd xdebug
 RUN docker-php-ext-install \
         bcmath \
         ctype \
@@ -48,7 +51,3 @@ RUN chown -R www-data:www-data /var/www/html
 # Configure Apache
 COPY docker/apache2/propodile.conf /etc/apache2/sites-available/000-default.conf
 RUN cat docker/apache2/security.conf >> /etc/apache2/conf-available/security.conf
-
-
-
-
