@@ -82,7 +82,7 @@ Suivez ces instructions pour configurer et exécuter Propodile sur votre machine
 8. Exécutez les migrations de la base de données :
 
     ```bash
-    php artisan migrate
+    php artisan migrate --seed
     ```
 
 ### Exécution de l'application

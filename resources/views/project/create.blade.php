@@ -43,7 +43,7 @@
             <div class="mt-6">
                 <x-label for="image" value="{{ __('Image') }}" class="text-lg" />
                 <x-input type="file" name="image" id="image" accept="image/*" class="mt-2 max-w-full" />
-                <p class="mt-2 text-gray-500 text-sm">Conseil : Image de 500x500 pixels.</p>
+                <p class="mt-2 text-gray-500 text-sm">Conseil : Image de 500x500 pixels en format PNG.</p>
             </div>
 
             <div class="mt-8 text-center">

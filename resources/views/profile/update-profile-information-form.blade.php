@@ -39,7 +39,7 @@
                 </div>
 
                 <x-secondary-button class="mt-2 me-2" type="button" x-on:click.prevent="$refs.photo.click()">
-                    {{ __('Sélectionner une nouvelle photo') }}
+                    {{ __('Sélectionner une nouvelle photo en format PNG') }}
                 </x-secondary-button>
 
                 @if ($this->user->profile_photo_path)
