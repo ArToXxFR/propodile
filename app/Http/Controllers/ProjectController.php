@@ -70,7 +70,7 @@ class ProjectController extends Controller
             DB::statement("CALL createProject(?, ?, ?, ?, ?, ?)", [
                 $request->title,
                 $request->description,
-                (isset($image)) ? 'storage/projects/images/' . $image : "storage/projects/images/default.jpg",
+                (isset($image)) ? 'storage/projects/images/' . $image : "storage/projects/images/default.png",
                 Auth::id(),
                 $request->status_id,
                 $request->tags,
