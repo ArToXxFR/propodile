@@ -41,6 +41,7 @@ class CreateNewUser implements CreatesNewUsers
                 'description' => $input['description'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
+                'profile_photo_path' => 'profile-photos/default.png',
             ]), function (User $user) {
                 // $this->createTeam($user);
             });
