@@ -8,6 +8,7 @@ artisan_list=(
     "config:cache"
     "route:cache"
     "view:cache"
+    "storage:link"
     "migrate --seed --force"
 )
 
