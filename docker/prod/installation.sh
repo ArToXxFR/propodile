@@ -10,6 +10,7 @@ artisan_list=(
     "view:cache"
     "storage:link"
     "migrate --seed --force"
+    "storage:link"
 )
 
 npm_list=(

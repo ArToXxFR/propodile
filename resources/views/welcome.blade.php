@@ -3,7 +3,7 @@
 <x-app-layout>
     <div class="relative min-h-screen bg-dots-darker bg-center bg-gray-100 selection:bg-red-500 selection:text-white">
         <div class="flex flex-wrap p-6">
-            @if (!empty($projects->items))   
+            @if (!empty($projects->all()))   
                 @foreach ($projects as $project)
                     <div class="w-full sm:w-1/2 lg:w-1/4 p-2">
                         <a href="{{ route("project.show", ["id" => $project->id]) }}" class="block rounded border overflow-hidden hover:shadow-lg transition duration-300 ease-in-out">
