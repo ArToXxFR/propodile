@@ -11,7 +11,7 @@
             <p class="text-gray-800">
                 Revenez à des eaux plus sûres en utilisant la navigation.
             </p>
-            <img src="public\storage\projects\images\default.jpg">
+            <img src="\public\storage\projects\images\default.jpg">
         </div>
     </div>
 </x-app-layout>
