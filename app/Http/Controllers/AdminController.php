@@ -53,13 +53,13 @@ class AdminController extends Controller
         ]);
     }
 
-    public function ban(int $userId): RedirectResponse
+    public function ban(Request $request, int $userId): RedirectResponse
     {
         $user = User::find($userId);
 
         $user->update([
             'banned' => true,
-            'banned_until' => now()->toDateString()
+            'banned_until' => $request->date ? $request->date : null
         ]);
 
         return redirect()->back()->with(['message' => 'L\'utilisateur a bien été banni.']);
