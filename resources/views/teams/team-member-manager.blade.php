@@ -135,11 +135,11 @@
                                         <button
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-500 transition duration-300 transform hover:text-gray-700 focus:outline-none focus:underline {{ $currentRole == $role->key ? 'text-blue-500 underline' : '' }}"
                                             wire:click="manageRole('{{ $user->id }}')">
-                                            {{ Laravel\Jetstream\Jetstream::findRole($user->membership->role)->name }}
+                                            {{ Laravel\Jetstream\Jetstream::findRole($user->teamRole($team)->key)->name }}
                                         </button>
                                     @elseif (Laravel\Jetstream\Jetstream::hasRoles())
                                         <div class="text-xs text-gray-400">
-                                            {{ Laravel\Jetstream\Jetstream::findRole($user->membership->role)->name }}
+                                            {{ Laravel\Jetstream\Jetstream::findRole($user->teamRole($team)->key)->name }}
                                         </div>
                                     @endif
 

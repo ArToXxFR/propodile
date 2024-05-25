@@ -44,18 +44,29 @@ class ProjectController extends Controller
             }
 
             $image = $this->isImage($request);
-            DB::statement("CALL createProject(?, ?, ?, ?, ?, ?)", [
-                $request->title,
-                $request->description,
-                (isset($image)) ? 'storage/projects/images/' . $image : "storage/projects/images/default.png",
-                Auth::id(),
-                $request->status_id,
-                $request->tags,
+            $project = Project::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => (isset($image)) ? 'storage/projects/images/' . $image : "storage/projects/images/default.png",
+                'owner_id' => Auth::id(),
+                'status_id' => $request->status_id,
             ]);
 
-            $project_id = DB::select("SELECT id FROM projects ORDER BY id DESC LIMIT 1");
+            $team = Team::create([
+                'name' => $request->title,
+                'personal_team' => 1,
+                'user_id' => Auth::id(),
+                'project_id' => $project->id
+            ]);
 
-            return to_route('project.show', ['id' => $project_id[0]->id]);
+            $tags = $request->input('tags');
+            $tags = explode(',', $tags);
+
+            foreach ($tags as $tag) {
+                Tag::create(['name' => $tag, 'project_id' => $project->id]);
+            }
+
+            return to_route('project.show', ['id' => $project->id]);
         } catch (\Exception $e) {
             Log::error("Impossible de créer le projet ou l'équipe : " . $e->getMessage());
             return redirect()->back()->dangerBanner(
@@ -77,7 +88,10 @@ class ProjectController extends Controller
             if (Gate::denies('delete-project', $team)) {
                 abort(403);
             }
-            DB::select('CALL deleteProject(?)', [$projectId]);
+
+            Project::destroy($projectId);
+            Team::where('project_id', $projectId)->delete();
+            Tag::where('project_id', $projectId)->delete();
 
             return to_route('home');
         } catch (ModelNotFoundException $e) {
@@ -101,25 +115,20 @@ class ProjectController extends Controller
     public function show(int $id): View|RedirectResponse|Response
     {
         try {
-            $project = Project::find($id);
-            $team = Team::where('project_id', $id)->firstOrFail();
-            $owner_project = User::where('id', $team->user_id)->firstOrFail();
-            $users_id = TeamUser::where('team_id', $team->id)->pluck('user_id')->toArray();
-            $users_belongs_project = User::whereIn('id', $users_id)->get();
-            $tags = Tag::all()->where('project_id', $project->id)->pluck('name')->toArray();
+            $project = Project::findOrFail($id);
 
-            $isAlreadyJoinRequest = TeamJoinRequest::where('user_id', Auth::id())->where('team_id', $team->id)->first();
+            $isAlreadyJoinRequest = TeamJoinRequest::where('user_id', Auth::id())->where('team_id', $project->team->id)->first();
 
             return view('project.show',[
                 'project' => $project,
-                'users' => $users_belongs_project,
-                'owner' => $owner_project,
-                'team' => $team,
+                'users' => $project->team->users,
+                'owner' => $project->owner,
+                'team' => $project->team,
                 'isAlreadyJoinRequest' => $isAlreadyJoinRequest,
-                'tags' => $tags
+                'tags' => $project->tags
             ]);
         } catch (ModelNotFoundException $e) {
-            Log::error("Impossible de récupérer les informations du projet.");
+            Log::error("Impossible de récupérer les informations du projet : " . $e->getMessage());
             return response()->view('errors.404', [], Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
             Log::error("Une erreur s'est produite lors de la récupération du projet : " . $e->getMessage());
@@ -169,13 +178,26 @@ class ProjectController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            DB::select('CALL updateProject(?, ?, ?, ?, ?, ?)', [
-                $projectId,
-                $request->title,
-                $request->description,
-                (isset($image)) ? 'storage/projects/images/' . $image : '',
-                $request->status_id,
-                $request->tags
+            $tagsToDelete = array_diff($oldTags, $newTags);
+            $tagsToCreate = array_diff($newTags, $oldTags);
+
+            Tag::whereIn('name', $tagsToDelete)->delete();
+
+            foreach ($tagsToCreate as $tagName) {
+                if (!empty($tagName)) {
+                    Tag::create(['name' => $tagName, 'project_id' => $projectId]);
+                }
+            }
+
+            $project->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => (isset($image)) ? 'storage/projects/images/' . $image : $project->image,
+                'status_id' => $request->status_id
+            ]);
+
+            $team->update([
+                'name' => $request->title
             ]);
 
             return redirect()->route('project.show', ['id' => $project->id]);
