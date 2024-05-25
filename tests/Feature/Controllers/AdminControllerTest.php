@@ -62,10 +62,14 @@ class AdminControllerTest extends TestCase
     public function test_ban_and_unban_success(): void
     {
         $this->actingAs($user = User::factory()->create(['role' =>  'admin']));
+        $request = new Request([
+           'date' => now()->toDateString()
+        ]);
 
-        $response = (new AdminController())->ban($user->id);
+        $response = (new AdminController())->ban($request, $user->id);
         $this->assertNotNull($response);
         $this->assertInstanceOf(RedirectResponse::class, $response);
+
         $response = (new AdminController())->unban($user->id);
         $this->assertNotNull($response);
         $this->assertInstanceOf(RedirectResponse::class, $response);

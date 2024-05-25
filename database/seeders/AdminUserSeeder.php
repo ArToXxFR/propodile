@@ -19,6 +19,7 @@ class AdminUserSeeder extends Seeder
             'firstname' => 'Admin',
             'lastname' => 'Admin',
             'grade_id' => 6,
+            'role' => "admin",
             'description' => 'Testing administrator account',
             'email' => 'admin@test.test',
             'password' => Hash::make('7MrOcjlCkzAM62z'),
