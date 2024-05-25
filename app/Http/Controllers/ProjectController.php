@@ -28,29 +28,6 @@ use Intervention\Image\Image;
 
 class ProjectController extends Controller
 {
-    private function isImage(Request $request): string|null
-    {
-        if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $image = $request->file('image');
-
-            // Générer un nom unique pour le fichier image
-            $imageName = uniqid('image_') . '.' . $image->getClientOriginalExtension();
-
-            $manager = new ImageManager(
-                new \Intervention\Image\Drivers\Gd\Driver()
-            );
-            // Redimensionnement de l'image avant de la stocker
-            $resizedImage = $manager->read($image)->resize(500, 500);
-
-            // Stocker le fichier image redimensionné dans le répertoire "public/projects/images"
-            Storage::put('public/projects/images/' . $imageName, $resizedImage->encode());
-
-            return $imageName;
-        } else {
-            return null;
-        }
-    }
-
     /**
      * Create a project
      *
@@ -247,6 +224,35 @@ class ProjectController extends Controller
             return redirect()->back()->dangerBanner(
                 __('Une erreur s\'est produite lors de la récupération du projet.'),
             );
+        }
+    }
+
+    /**
+     * Store the image of the project in the storage
+     *
+     * @param Request $request
+     * @return string|null
+     */
+    private function isImage(Request $request): string|null
+    {
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $image = $request->file('image');
+
+            // Générer un nom unique pour le fichier image
+            $imageName = uniqid('image_') . '.' . $image->getClientOriginalExtension();
+
+            $manager = new ImageManager(
+                new \Intervention\Image\Drivers\Gd\Driver()
+            );
+            // Redimensionnement de l'image avant de la stocker
+            $resizedImage = $manager->read($image)->resize(500, 500);
+
+            // Stocker le fichier image redimensionné dans le répertoire "public/projects/images"
+            Storage::put('public/projects/images/' . $imageName, $resizedImage->encode());
+
+            return $imageName;
+        } else {
+            return null;
         }
     }
 }

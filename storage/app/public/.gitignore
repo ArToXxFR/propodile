@@ -1,3 +1,4 @@
 *
 !.gitignore
-!projects/images/default.jpg
+!projects/images/default.png
+!profile-photos/default.png
