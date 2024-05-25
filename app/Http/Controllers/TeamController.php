@@ -27,14 +27,13 @@ class TeamController extends Controller
         try {
             $user = User::findOrFail(Auth::id());
             $team = Team::where('project_id', $request->id)->firstOrFail();
-            $owner = User::where('id', $team->user_id)->firstOrFail();
 
             TeamJoinRequest::create([
                 'user_id' => $user->id,
                 'team_id' => $team->id,
             ]);
 
-            Mail::to($owner->email)->send(new MailJoinRequest($user->username, $team->id));
+            Mail::to($user->owner->email)->send(new MailJoinRequest($user->username, $team->id));
 
             return to_route('home')->with('status', 'La demande a bien été envoyée.');
         } catch (ModelNotFoundException $e) {
