@@ -11,7 +11,7 @@
             <p class="text-gray-800">
                 Revenez à des eaux plus sûres en utilisant la navigation.
             </p>
-            <img src="lien_vers_image_crocodile.png" alt="Propodile logo">
+            <img src="\public\storage\projects\images\default.jpg">
         </div>
     </div>
 </x-app-layout>
