@@ -9,11 +9,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
+    libzip-dev \
     nodejs \
     npm \
-    zip \
-    awstats \
-    cron 
+    zip
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -33,7 +32,8 @@ RUN docker-php-ext-install \
         fileinfo \
         mbstring \
         pdo_mysql \
-        xml
+        xml \
+        zip
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
