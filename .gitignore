@@ -17,4 +17,5 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-documents/
+documents/*
+!documents/mld.loo
