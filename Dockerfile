@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     nodejs \
     npm \
-    zip
+    zip \
+    default-mysql-client
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
