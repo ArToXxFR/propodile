@@ -37,8 +37,8 @@ services:
         healthcheck:
             test: ["CMD", "/usr/local/bin/healthcheck.sh", "--connect", "--innodb_initialized"]
             interval: 5s
-            retries: 3
-            timeout: 3s
+            retries: 5
+            timeout: 20s
         networks:
             - propodile-network
 
