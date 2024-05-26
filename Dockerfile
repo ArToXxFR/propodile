@@ -47,7 +47,3 @@ WORKDIR /var/www/html
 # Copy application code
 COPY . .
 RUN chown -R www-data:www-data /var/www/html
-
-# Configure Apache
-COPY docker/apache2/propodile.conf /etc/apache2/sites-available/000-default.conf
-RUN cat docker/apache2/security.conf >> /etc/apache2/conf-available/security.conf
