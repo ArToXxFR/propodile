@@ -1,4 +1,4 @@
 *
-!.gitignore
-!projects/images/default.png
-!profile-photos/default.png
+!app-logo.png
+!profile-photos/
+!projects/
