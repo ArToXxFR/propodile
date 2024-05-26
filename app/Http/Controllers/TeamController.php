@@ -33,7 +33,7 @@ class TeamController extends Controller
                 'team_id' => $team->id,
             ]);
 
-            Mail::to($user->owner->email)->send(new MailJoinRequest($user->username, $team->id));
+            Mail::to($team->owner->email)->send(new MailJoinRequest($user->username, $team->id));
 
             return to_route('home')->with('status', 'La demande a bien été envoyée.');
         } catch (ModelNotFoundException $e) {
