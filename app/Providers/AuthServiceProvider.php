@@ -27,13 +27,13 @@ class AuthServiceProvider extends ServiceProvider
                 $user->hasTeamRole($team, 'admin') ||
                 $user->hasTeamRole($team, 'owner') ||
                 $user->role == 'admin' ||
-                $user->role == 'moderator';
+                $user->role == 'editor';
         });
 
         Gate::define('delete-project', function ($user, $team) {
             return $user->hasTeamRole($team, 'owner') ||
                 $user->role == 'admin' ||
-                $user->role == 'moderator';
+                $user->role == 'editor';
         });
 
         Gate::define('invite-member-project', function($user, $team) {

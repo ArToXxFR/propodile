@@ -16,7 +16,7 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role == 'guest') {
+        if (Auth::check() && Auth::user()->role != 'admin') {
             return redirect()->back()->dangerBanner(
                 __('Vous n\'avez pas les permissions nécessaires.'),
             );
