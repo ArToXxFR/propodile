@@ -1,3 +1,3 @@
-<a href="/">
-  <img src="{{ asset('\public\storage\projects\images\default.jpg') }}" alt="Propodile">
+<a href="{{ route('home') }}">
+  <img class="max-h-12 rounded-full" src="{{ asset('storage/app-logo.png') }}" alt="Propodile">
 </a>
