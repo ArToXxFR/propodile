@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
@@ -28,7 +29,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'username', 'firstname', 'lastname', 'email', 'password', 'grade_id', 'description', 'role', 'banned', 'banned_until'
+        'username', 'firstname', 'lastname', 'email', 'password', 'grade_id', 'description', 'role', 'banned', 'banned_until', 'profile_photo_path'
     ];
 
     /**
@@ -61,8 +62,8 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function teams_users() {
-        return $this->belongsToMany(TeamUser::class);
+    public function teams() {
+        return $this->belongsToMany(Team::class);
     }
 
     public function projects(): hasMany
@@ -75,6 +76,6 @@ class User extends Authenticatable
     }
 
     public function isAdmin() {
-        return $this->role === 'admin' || $this->role === 'moderator';
+        return $this->role === 'admin';
     }
 }

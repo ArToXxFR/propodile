@@ -1,6 +1,9 @@
 <!-- resources/views/404.blade.php -->
 <x-app-layout>
-    <div class="flex items-center justify-center h-screen bg-gray-100">
+    <div class="flex items-center flex-col justify-center h-screen bg-gray-100">
+        <a href="{{ route('home') }}">
+            <img class="max-h-24 rounded mb-8" src="{{ asset('storage/app-logo.png') }}" alt="Propodile">
+        </a>
         <div class="text-center">
             <div class='uppercase text-4xl text-red-500 font-bold mb-4'>
                 Erreur 404
@@ -11,7 +14,6 @@
             <p class="text-gray-800">
                 Revenez à des eaux plus sûres en utilisant la navigation.
             </p>
-            <img src="lien_vers_image_crocodile.png" alt="Propodile logo">
         </div>
     </div>
 </x-app-layout>

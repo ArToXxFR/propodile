@@ -42,12 +42,6 @@
                     {{ __('Sélectionner une nouvelle photo en format PNG') }}
                 </x-secondary-button>
 
-                @if ($this->user->profile_photo_path)
-                    <x-secondary-button type="button" class="mt-2" wire:click="deleteProfilePhoto">
-                        {{ __('Supprimer la photo') }}
-                    </x-secondary-button>
-                @endif
-
                 <x-input-error for="photo" class="mt-2" />
             </div>
         @endif

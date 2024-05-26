@@ -1,52 +1,50 @@
 @section('title', 'Utilisateurs Bannis - Admin')
 
-<div>
-    <x-app-layout>
-        <x-slot name="header">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Liste des utilisateurs bannis') }}
-            </h2>
-        </x-slot>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Liste des utilisateurs bannis') }}
+        </h2>
+    </x-slot>
 
-        <div class="py-6 sm:py-10">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="space-y-4">
-                    @forelse ($users as $user)
-                        @if ($user->banned)
-                            <div class="flex flex-col sm:flex-row items-center justify-between border-b border-gray-200 p-4">
-                                <div class="flex items-center mb-4 sm:mb-0">
-                                    <img class="w-8 h-8 rounded-full object-cover" src="{{ $user->profile_photo_url }}" alt="{{ $user->username }}">
-                                    <div class="ml-2">
-                                        <div class="text-sm font-medium text-gray-800">{{ $user->firstname }} {{ $user->lastname }}</div>
-                                        <div class="text-sm text-gray-600">{{ Laravel\Jetstream\Jetstream::findRole($user->role)->name }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-center space-x-4">
-                                    <a href="{{ route('user.show', ['username' => $user->username]) }}" class="px-4 py-2 border bg-white border-blue-500 text-blue-500 rounded-md hover:bg-blue-100 hover:text-blue-500 transition duration-300 ease-in-out">Voir le profil</a>
-                                    <button onclick="openDeleteModal({{ $user->id }})" class="px-4 py-2 border bg-white border-red-500 text-red-500 rounded-md hover:bg-red-100 hover:text-red-500 transition duration-300 ease-in-out">
-                                        Supprimer l'utilisateur
-                                    </button>
-                                    @include('admin.users-delete-popup')
-                                    <button onclick="openUnBanModal({{ $user->id }})" class="inline-flex items-center px-4 py-2 border bg-white border-green-500 text-green-500 rounded-md hover:bg-green-100 hover:text-green-500 focus:shadow-outline-green transition duration-300 ease-in-out">
-                                        Débannir
-                                    </button>
-                                    @include('admin.users-unban-popup')
+    <div class="py-6 sm:py-10">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="space-y-4">
+                @forelse ($users as $user)
+                    @if ($user->banned)
+                        <div class="flex flex-col sm:flex-row items-center justify-between border-b border-gray-200 p-4">
+                            <div class="flex items-center mb-4 sm:mb-0">
+                                <img class="w-8 h-8 rounded-full object-cover" src="{{ $user->profile_photo_url }}" alt="{{ $user->username }}">
+                                <div class="ml-2">
+                                    <div class="text-sm font-medium text-gray-800">{{ $user->firstname }} {{ $user->lastname }}</div>
+                                    <div class="text-sm text-gray-600">{{ Laravel\Jetstream\Jetstream::findRole($user->role)->name }}</div>
                                 </div>
                             </div>
-                        @endif
-                    @empty
-                        <div class="text-gray-600 py-4">Aucun utilisateur banni trouvé.</div>
-                    @endforelse
-                </div>
 
-                <!-- Affichage de la pagination -->
-                <div class="mt-4">
-                    {{ $users->links() }}
-                </div>
+                            <div class="flex items-center space-x-4">
+                                <a href="{{ route('user.show', ['username' => $user->username]) }}" class="px-4 py-2 border bg-white border-blue-500 text-blue-500 rounded-md hover:bg-blue-100 hover:text-blue-500 transition duration-300 ease-in-out">Voir le profil</a>
+                                <button onclick="openDeleteModal({{ $user->id }})" class="px-4 py-2 border bg-white border-red-500 text-red-500 rounded-md hover:bg-red-100 hover:text-red-500 transition duration-300 ease-in-out">
+                                    Supprimer l'utilisateur
+                                </button>
+                                @include('admin.users-delete-popup')
+                                <button onclick="openUnBanModal({{ $user->id }})" class="inline-flex items-center px-4 py-2 border bg-white border-green-500 text-green-500 rounded-md hover:bg-green-100 hover:text-green-500 focus:shadow-outline-green transition duration-300 ease-in-out">
+                                    Débannir
+                                </button>
+                                @include('admin.users-unban-popup')
+                            </div>
+                        </div>
+                    @endif
+                @empty
+                    <div class="text-gray-600 py-4">Aucun utilisateur banni trouvé.</div>
+                @endforelse
+            </div>
+
+            <!-- Affichage de la pagination -->
+            <div class="mt-4">
+                {{ $users->links() }}
             </div>
         </div>
-    </x-app-layout>
-</div>
+    </div>
+</x-app-layout>
 
 @include('scripts.unban-scripts')

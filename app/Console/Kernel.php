@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->job(new CheckBannedStatus())->daily();
-        $schedule->command('backup:database')->daily();
+        $schedule->command('backup:run')->daily();
     }
 
     /**

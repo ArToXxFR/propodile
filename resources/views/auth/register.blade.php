@@ -1,5 +1,5 @@
 @section('title', 'Créer un compte')
-<x-guest-layout>
+<x-app-layout>
     <x-authentication-card>
         <x-slot name="logo">
             <x-authentication-card-logo />
@@ -64,9 +64,9 @@
                             <x-checkbox name="terms" id="terms" required />
 
                             <div class="ms-2">
-                                {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Terms of Service').'</a>',
-                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Privacy Policy').'</a>',
+                                {!! __('J\'accepte les :terms_of_service et j\'ai lu la :privacy_policy', [
+                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Conditions d\'utilisation').'</a>',
+                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Politique de confidentialité').'</a>',
                                 ]) !!}
                             </div>
                         </div>
@@ -85,4 +85,4 @@
             </div>
         </form>
     </x-authentication-card>
-</x-guest-layout>
+</x-app-layout>

@@ -8,6 +8,7 @@
             @method('PUT')
             <div class="mb-6">
                 <label for="banEndDate" class="block text-lg font-medium text-gray-700">Date de fin du bannissement (Laissez vide pour un bannissement permanent)</label>
+                <input type="date" id="banEndDate" name="date" class="mt-2 p-3 block w-full border rounded-md" min="{{ now()->toDateString() }}">
                 @error('banEndDate') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 

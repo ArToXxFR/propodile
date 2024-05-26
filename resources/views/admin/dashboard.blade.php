@@ -20,11 +20,11 @@
                             </div>
                         @endforeach
                         <div class="mt-4">
-                            <x-button class="w-full">
-                                <a href="{{ route('admin.projects') }}">
+                            <a href="{{ route('admin.projects') }}">
+                                <x-button class="w-full">
                                     {{ __('Voir plus de projets...') }}
-                                </a>
-                            </x-button>
+                                </x-button>
+                            </a>
                         </div>
                     </x-dashboard-section>
                 </div>
@@ -33,26 +33,26 @@
                 <div class="w-1/2">
                     <x-dashboard-section title="Utilisateurs" :items="$users" route="user.show">
                         @foreach($users as $user)
-                            <div class="mb-4">
-                                <a href="{{ route('user.show', ['username' => $user->username]) }}">
+                            <a href="{{ route('user.show', ['username' => $user->username]) }}">
+                                <div class="mb-4">
                                     <x-dashboard-item :name="$user->username" />
-                                </a>
-                            </div>
+                                </div>
+                            </a>
                         @endforeach
                         <div class="mt-4">
-                            <x-button class="w-full">
-                                <a href="{{ route('admin.users') }}">
+                            <a href="{{ route('admin.users') }}">
+                                <x-button class="w-full">
                                     {{ __('Voir plus d\'utilisateurs...') }}
-                                </a>
-                            </x-button>
+                                </x-button>
+                            </a>
                         </div>
                         <!-- Bouton pour voir les utilisateurs bannis -->
                         <div class="mt-4">
-                            <x-button class="w-full">
-                                <a href="{{ route('admin.users.banned') }}">
+                            <a href="{{ route('admin.users.banned') }}">
+                                <x-button class="w-full">
                                     {{ __('Voir les utilisateurs bannis') }}
-                                </a>
-                            </x-button>
+                                </x-button>
+                            </a>
                         </div>
                     </x-dashboard-section>
                 </div>
