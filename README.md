@@ -10,21 +10,33 @@ Propodile est un projet dédié à l'épreuve du BTS SIO (Services Informatiques
 - Emilien CUNY : https://github.com/ArToXxFR
 
 ## Technologies Utilisées
+----------------------------
+
 
 - **Laravel**: Un framework PHP élégant pour le développement web.
 - **Node.js**: Un environnement d'exécution JavaScript côté serveur.
 - **Composer**: Un gestionnaire de dépendances pour PHP.
 - **Git**: Un système de contrôle de version distribué.
 
-## Schemas
+## Documentation
+----------------------------
 
- //TODO
- - Parcours utilisateur
- - MCD
+La documentation complète du projet est disponible [ici](https://github.com/ArToXxFR/propodile/wiki)
 
-## Aperçu du projet
+## Tester le projet
 
-//TODO
+Il est possible de tester directement le projet à l'adresse suivante : 
+
+- [propodile.cuny.engineer](https://propodile.cuny.engineer)
+
+Il est également possible de tester l'application avec un compte administrateur avec les identifiants suivants :
+
+Identifiant : admin
+
+Mot de passe : 7MrOcjlCkzAM62z
+
+:information_source: Les identifiants sont uniquement disponible car le projet est encore en face de test et permet aux
+jury du BTS SIO de pouvoir tester l'application.
 
 ## Installation
 ----------------------------
