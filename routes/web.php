@@ -80,8 +80,6 @@ Route::middleware([
     });
 });
 
-Route::get('/project/show', [ProjectController::class, 'index'])
-->name('project.show');
 Route::get('/project/show/{id}', [ProjectController::class, 'show'])
 ->name('project.show');
 
